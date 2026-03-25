@@ -1,0 +1,90 @@
+package com.huntermanager.data;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+public class HunterNames {
+    private static final List<String> nomes = Arrays.asList(
+        "Kabuki",
+        "Nisa",
+        "Doran",
+        "Mira",
+        "Elgor",
+        "Violet",
+        "Tom",
+        "Anne",
+        "Robert",
+        "Macarov",
+        "Filip",
+        "Gabriel",
+        "Afonso",
+        "Arthur",
+        "Henry",
+        "Polo",
+        "Marvin",
+        "Berlar",
+        "Pedro",
+        "Luiza",
+        "Maria",
+        "Elmira",
+        "Emily",
+        "Luiz",
+        "Luisa",
+        "Pablo",
+        "Tairel",
+        "Ezequiel",
+        "Erasmo",
+        "Marcos",
+        "Zoe",
+        "Gabriele",
+        "John",
+        "Stuart",
+        "Lua",
+        "Kristal",
+        "Lara",
+        "Clara",
+        "Alberto",
+        "Anthon",
+        "William",
+        "Marcelo",
+        "Lila",
+        "Jorel",
+        "Kleber",
+        "Klemer",
+        "Iaci",
+        "Jorge",
+        "Rodrigo",
+        "Lucas",
+        "Merlin",
+        "Nala",
+        "Melina",
+        "Melanie",
+        "Selma",
+        "Selia",
+        "Johan",
+        "Celso",
+        "Sonia",
+        "Alfred",
+        "Emilia",
+        "Samanta",
+        "Geraldo",
+        "Laniel",
+        "Lizzy",
+        "Ronald",
+        "Alfredo",
+        "Luno",
+        "Paulo",
+        "Pietro",
+        "Marlon",
+        "Marlene",
+        "Nasir",
+        "Renato"
+    );
+
+    private static final Random random = new Random();
+
+    public static String generateName() {
+        return nomes.get(random.nextInt(nomes.size()));
+    }
+}
