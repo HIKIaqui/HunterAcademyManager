@@ -31,7 +31,8 @@ public class AssignmentTemplates {
                 "Animal Agressivo na Estrada",
                 "Desaparecimento de Mantimentos",
                 "Criatura Pequena nos Arredores",
-                "Criaturas Grandes"
+                "Criaturas Menores",
+                "Possível Perigo"
             };
             case 1 -> new String[] {
                 "Infestação na Vila",
@@ -41,6 +42,7 @@ public class AssignmentTemplates {
             };
             case 2 -> new String[] {
                 "Mortes na Estrada Velha",
+                "Desaparecimentos na Floresta",
                 "Criatura de Médio Porte Avistada",
                 "Infestação Persistente",
                 "Aldeia em Estado de Pânico"
@@ -48,8 +50,9 @@ public class AssignmentTemplates {
             case 3 -> new String[] {
                 "Sobreviventes Falam de Horrores",
                 "Abate em Massa nas Fazendas",
+                "Cadáveres Acumulados em Massa",
                 "Massacre na Vila",
-                "Aldeia Completamente Perdida"
+                "Povoado Completamente Perdido"
             };
             case 4 -> new String[] {
                 "Zona de Morte Confirmada",
@@ -70,7 +73,7 @@ public class AssignmentTemplates {
     private static String[] getPossibleDescriptionsByDifficulty(int difficulty) {
         return switch (difficulty) {
             case 0 -> new String[] {
-                "Relatos indicam uma ameaça menor, mas ainda capaz de ferir ou matar civis despreparados.",
+                "Relatos indicam uma ameaça menor, mas ainda capaz de ferir civis despreparados.",
                 "A situação parece controlável, embora negligência ainda possa transformar o problema em algo pior.",
                 "Moradores relatam atividade anormal durante a noite. A ameaça aparenta ser limitada, mas real."
             };
@@ -92,11 +95,14 @@ public class AssignmentTemplates {
             case 4 -> new String[] {
                 "A região afetada está à beira do abandono. A ameaça ultrapassa o que caçadores comuns enfrentam com segurança.",
                 "Há evidências de que falhas anteriores agravaram ainda mais a situação.",
+                "Os últimos 3 grupos enviados foram mortos ao chegar.",
+                "Já foram registradas mais de centenas de fatalidades, com o número crescendo mais a cada minuto.",
                 "O contrato é considerado altamente letal. Qualquer erro tende a gerar consequências irreversíveis."
             };
             case 5 -> new String[] {
                 "Não há expectativa razoável de retorno seguro. O contrato existe porque ignorá-lo pode ser ainda pior.",
-                "A presença detectada representa risco extremo à continuidade da região afetada.",
+                "A presença detectada representa risco extremo à continuidade da região afetada, e talvez dessa realidade.",
+                "Milhares de mortes já foram registradas desde o início da atividade da ameaça. Os inúmeros caçadores enviados foram dizimados.",
                 "O contrato envolve uma ameaça fora do padrão operacional comum. O envio da equipe é, em si, um ato desesperado."
             };
             default -> new String[] {

@@ -1,87 +1,42 @@
 package com.huntermanager.data;
 
-public class MonsterHunter {
-    private String name;
-    private int constitution;
-    private int agility;
-    private int mind;
-    private int social;
-    private int luck;
+import java.util.ArrayList;
+import java.util.List;
 
-    private int maxPE;
-    private int PE;
-    private int maxHP;
-    private int HP;
+import com.huntermanager.data.enums.Trait;
+import com.huntermanager.data.enums.Trauma;
+
+
+
+public class MonsterHunter extends Entity {
     private final int maxStress = 10;
     private int stress;
+    private Item equippedWeapon;
+    private Item equippedArmor;
+    private Item equippedAccessory;
 
-    private int baseArmor;
-
-    private void calculateMaxStats() {
-        this.maxHP = 15 + (constitution * 10);
-        this.maxPE = 4 + (mind * 2) + (constitution * 2);
-    }
-
-    private void resetCurrentStats() {
-        this.HP = maxHP;
-        this.PE = maxPE;
-        this.stress = 0;
-    }
+    private List<Trauma> traumas;
+    private List<Trait> traits;
 
     public MonsterHunter(String name, int constitution, int agility, int mind, int social, int luck) {
-        this.name = name;
-        this.constitution = constitution;
-        this.agility = agility;
-        this.mind = mind;
-        this.social = social;
-        this.luck = luck;
-        this.baseArmor = 0;
+        super(
+            name,
+            15 + (constitution * 10),          // maxHP
+            4 + (mind * 3) + constitution,     // maxPE
+            constitution,
+            agility,
+            mind,
+            social,
+            luck
+        );
 
-        calculateMaxStats();
-        resetCurrentStats();
+        this.stress = 0;
+        this.traits = new ArrayList<>();
+        this.traumas = new ArrayList<>();
+
     }
 
-    // ========== GETTERS ==========
-
-    public String getName() {
-        return name;
-    }
-
-    public int getConstitution() {
-        return constitution;
-    }
-
-    public int getAgility() {
-        return agility;
-    }
-
-    public int getMind() {
-        return mind;
-    }
-
-    public int getSocial() {
-        return social;
-    }
-
-    public int getLuck() {
-        return luck;
-    }
-
-    public int getMaxPE() {
-        return maxPE;
-    }
-
-    public int getPE() {
-        return PE;
-    }
-
-    public int getMaxHP() {
-        return maxHP;
-    }
-
-    public int getHP() {
-        return HP;
-    }
+// ========== GETTERS ==========
 
     public int getMaxStress() {
         return maxStress;
@@ -91,73 +46,41 @@ public class MonsterHunter {
         return stress;
     }
 
-    public int getArmor() {
-        return baseArmor;
+    public List<Trauma> getTraumas() {
+        return traumas;
     }
 
-    public int getDodge() {
-        return 5 + (agility * 5);
+    public List<Trait> getTraits() {
+        return traits;
     }
 
-    // ========== SETTERS ==========
-
-    public void setArmor(int armor) {
-        this.baseArmor = Math.max(0, armor);
+    public Item getEquippedWeapon() {
+        return equippedWeapon;
     }
 
-    // ========== HP ==========
-
-    public void setHP(int HP) {
-        this.HP = Math.max(0, Math.min(HP, maxHP));
+    public Item getEquippedArmor() {
+        return equippedArmor;
     }
 
-    public void takeDamage(int damage) {
-        if (damage > 0) {
-            int finalDamage = Math.max(1, damage - getArmor());
-            setHP(this.HP - finalDamage);
-        }
+    public Item getEquippedAccessory() {
+        return equippedAccessory;
     }
 
-    public void takeDamageIgnoreArmor(int damage) {
-        if (damage > 0) {
-            int finalDamage = Math.max(1, damage);
-            setHP(this.HP - finalDamage);
-        }
+// ========== SETTERS ==========
+
+    public void setEquippedWeapon(Item item) {
+        this.equippedWeapon = item;
     }
 
-    public void heal(int amount) {
-        if (amount > 0) {
-            setHP(this.HP + amount);
-        }
+    public void setEquippedArmor(Item item) {
+        this.equippedArmor = item;
     }
 
-    public boolean isAlive() {
-        return HP > 0;
+    public void setEquippedAccessory(Item item) {
+        this.equippedAccessory = item;
     }
 
-    // ========== PE ==========
-
-    public void setPE(int PE) {
-        this.PE = Math.max(0, Math.min(PE, maxPE));
-    }
-
-    public void spendPE(int amount) {
-        if (amount > 0) {
-            setPE(this.PE - amount);
-        }
-    }
-
-    public void recoverPE(int amount) {
-        if (amount > 0) {
-            setPE(this.PE + amount);
-        }
-    }
-
-    public boolean isExhausted() {
-        return PE <= 0;
-    }
-
-    // ========== STRESS ==========
+// ========== STRESS ==========
 
     public void setStress(int stress) {
         this.stress = Math.max(0, Math.min(stress, maxStress));
@@ -177,5 +100,56 @@ public class MonsterHunter {
 
     public boolean isStressedOut() {
         return stress >= maxStress;
+    }
+
+// ========== TRAUMAS ==========
+
+    public boolean hasTrauma(Trauma trauma) {
+        return traumas.contains(trauma);
+    }
+
+    public boolean addTrauma(Trauma trauma) {
+        if (trauma != null && !traumas.contains(trauma)) {
+            traumas.add(trauma);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeTrauma(Trauma trauma) {
+        return traumas.remove(trauma);
+    }
+
+// ========== TRAITS ==========
+
+    public boolean hasTrait(Trait trait) {
+        return traits.contains(trait);
+    }
+
+    public boolean addTrait(Trait trait) {
+        if (trait != null && !traits.contains(trait)) {
+            traits.add(trait);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeTrait(Trait trait) {
+        return traits.remove(trait);
+    }
+
+// ========== RECALCULAR STATUS ==========
+
+    public void recalculateStats() {
+        setMaxHP(15 + (getConstitution() * 10));
+        setMaxPE(4 + (getMind() * 3) + getConstitution());
+
+        if (getHP() > getMaxHP()) {
+            setHP(getMaxHP());
+        }
+
+        if (getPE() > getMaxPE()) {
+            setPE(getMaxPE());
+        }
     }
 }

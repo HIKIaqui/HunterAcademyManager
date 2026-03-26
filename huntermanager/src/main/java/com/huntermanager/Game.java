@@ -4,8 +4,12 @@ import java.util.Scanner;
 
 import com.huntermanager.data.Assignment;
 import com.huntermanager.data.HunterAcademy;
+import com.huntermanager.data.Item;
 import com.huntermanager.data.MonsterHunter;
+import com.huntermanager.data.enums.ItemTemplate;
 import com.huntermanager.data.enums.MonsterHunterTemplates;
+import com.huntermanager.data.enums.Trait;
+import com.huntermanager.data.enums.Trauma;
 import com.huntermanager.data.functions.TextRenderFunctions;
 
 public class Game {
@@ -42,6 +46,7 @@ public class Game {
     private final int AssignmentSetCombatStyleMenu = 14;
     private final int AssignmentChoosePositionMenu = 15;
     private final int AssignmentChooseCombatStyleMenu = 16;
+    private final int StorageMenu = 17;
     
     public enum Difficulty {
         EASY("Superfície"),
@@ -191,6 +196,12 @@ public class Game {
                     option = readOption();
                     selectMenuOptions(option);
                     break;
+                case StorageMenu:
+                    trf.clearConsole();
+                    showStorageMenu();
+                    option = readOption();
+                    selectMenuOptions(option);
+                    break;
             }            
         }
     }
@@ -248,9 +259,12 @@ public class Game {
                         room = BarManagementMenu;
                         break;
                     case 5:
-                        academy.advanceDayTime();
+                        room = StorageMenu;
                         break;
                     case 6:
+                        academy.advanceDayTime();
+                        break;
+                    case 7:
                         break;
                     case 0:
                         room = MainMenu;
@@ -539,7 +553,13 @@ public class Game {
                         break;
                 }
                 break;
-            
+            case StorageMenu:
+                switch (option) {
+                    case 0:
+                        room = AcademyMainMenu;
+                        break;
+                }
+                break;
         }
     }
 
@@ -570,6 +590,12 @@ public class Game {
         academy.setStars(10);
         academy.setCurrentDay(1);
         academy.setCurrentDayTime(HunterAcademy.MORNING);
+        academy.addItem(Item.fromTemplate(ItemTemplate.IRON_SWORD));
+        academy.addItem(Item.fromTemplate(ItemTemplate.HUNTER_DAGGER));
+        academy.addItem(Item.fromTemplate(ItemTemplate.IRON_ARMOR));
+        academy.addItem(Item.fromTemplate(ItemTemplate.LEATHER_ARMOR));
+        academy.addItem(Item.fromTemplate(ItemTemplate.LUCKY_CHARM));
+        academy.addItem(Item.fromTemplate(ItemTemplate.BASIC_MEDKIT));
     }
 
     private boolean addHunterToSelectedAssignment(int hunterIndex) {
@@ -700,8 +726,9 @@ public class Game {
         System.out.println("2 - Contratos");
         System.out.println("3 - Clínica");
         System.out.println("4 - Bar");
-        System.out.println("5 - Passar Tempo");
-        System.out.println("6 - Status da Academia");
+        System.out.println("5 - Armazém");
+        System.out.println("6 - Passar Tempo");
+        System.out.println("7 - Status da Academia");
         System.out.println("0 - Voltar ao Menu Principal");
 
         System.out.print("\nEscolha uma opção: ");
@@ -762,14 +789,32 @@ public class Game {
         System.out.println("Social: " + selectedHunter.getSocial());
         System.out.println("Sorte: " + selectedHunter.getLuck());
 
+        System.out.println("\n--- CARACTERÍSTICAS ---");
+            if (selectedHunter.getTraits().isEmpty()) {
+                System.out.println("Nenhuma.");
+            } else {
+                for (Trait trait : selectedHunter.getTraits()) {
+                    System.out.println("-> " + trait.getDisplayName());
+                }
+            }
+
+        System.out.println("\n--- TRAUMAS ---");
+            if (selectedHunter.getTraumas().isEmpty()) {
+                System.out.println("Nenhum.");
+            } else {
+                for (Trauma trauma : selectedHunter.getTraumas()) {
+                    System.out.println("-> " + trauma.getDisplayName());
+                }
+            }
+
         System.out.println("\n--- SITUAÇÃO ---");
-        if (academy.isHunterInBar(selectedHunterIndex)) {
-            System.out.println("< No Bar até o fim do Ciclo >");
-        } else if (academy.isHunterInClinic(selectedHunterIndex)) {
-            System.out.println("< Na Clínica até o fim do Ciclo >");
-        } else {
-            System.out.println("< Livre >");
-        }
+            if (academy.isHunterInBar(selectedHunterIndex)) {
+                System.out.println("< No Bar até o fim do Ciclo >");
+            } else if (academy.isHunterInClinic(selectedHunterIndex)) {
+                System.out.println("< Na Clínica até o fim do Ciclo >");
+            } else {
+                System.out.println("< Livre >");
+            }
 
         System.out.println("\n--- OPÇÕES ---");
         System.out.println("1 - Enviar para a Clínica");
@@ -1027,5 +1072,21 @@ public class Game {
         System.out.println("0 - Voltar");
 
         System.out.print("\nEscolha uma opção: ");
+    }
+
+    private void showStorageMenu() {
+        System.out.println("\n======= ARMAZÉM =======\n");
+
+        for (Item item : academy.getActiveItems()) {
+            System.out.print(item.getName() + " - " + item.getType());
+
+            if (item.isEquipped()) {
+                System.out.println(" [Equipado por " + item.getEquippedBy().getName() + "]");
+            } else {
+                System.out.println(" [Livre]");
+            }
+        }
+        System.out.println("\n------------");
+        System.out.println("\n0 - Voltar");
     }
 }

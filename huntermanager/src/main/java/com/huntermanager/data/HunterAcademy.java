@@ -10,6 +10,8 @@ public class HunterAcademy {
     private int[] clinicSlots = {-1, -1};
     private int[] barSlots = {-1, -1};
 
+    private Item[] inventory = new Item[20];
+
     public static final int MORNING = 0;
     public static final int AFTERNOON = 1;
     public static final int NIGHT = 2;
@@ -199,6 +201,7 @@ public class HunterAcademy {
 
 
 // ====== CLÍNICA ======
+
     public boolean isClinicFull() {
         for (int slot : clinicSlots) {
             if (slot == -1) return false;
@@ -372,6 +375,7 @@ public class HunterAcademy {
     }
 
 // ========== CONTRATOS ==========
+
     private Assignment[] availableAssignments = new Assignment[3];
 
     public Assignment[] getAvailableAssignments() {
@@ -436,5 +440,147 @@ public class HunterAcademy {
         }
 
         return availableIndexes;
+    }
+
+// ========== ARMAZENAMENTO ==========
+
+    public boolean addItem(Item item) {
+        for (int i = 0; i < inventory.length; i++) {
+            if (inventory[i] == null) {
+                inventory[i] = item;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeItem(int index) {
+        if (index >= 0 && index < inventory.length && inventory[index] != null) {
+            inventory[index] = null;
+            return true;
+        }
+        return false;
+    }
+
+    public Item[] getInventory() {
+        return inventory;
+    }
+
+    public int getInventoryCount() {
+        int count = 0;
+        for (Item item : inventory) {
+            if (item != null) count++;
+        }
+        return count;
+    }
+
+    public int getRealInventoryIndex(int displayIndex) {
+        if (displayIndex < 0 || displayIndex >= getInventoryCount()) {
+            return -1;
+        }
+
+        int current = 0;
+
+        for (int i = 0; i < inventory.length; i++) {
+            if (inventory[i] != null) {
+                if (current == displayIndex) {
+                    return i;
+                }
+                current++;
+            }
+        }
+
+        return -1;
+    }
+
+    public Item[] getActiveItems() {
+        int count = getInventoryCount();
+        Item[] active = new Item[count];
+
+        int index = 0;
+        for (Item item : inventory) {
+            if (item != null) {
+                active[index++] = item;
+            }
+        }
+
+        return active;
+    }
+
+    public boolean equipItemToHunter(Item item, MonsterHunter hunter) {
+        if (item == null || hunter == null) return false;
+
+        // item precisa existir no inventário da academia
+        boolean itemExists = false;
+        for (Item inventoryItem : inventory) {
+            if (inventoryItem == item) {
+                itemExists = true;
+                break;
+            }
+        }
+
+        if (!itemExists) return false;
+
+        // se já estiver equipado em alguém, remove de lá primeiro
+        if (item.isEquipped()) {
+            MonsterHunter previousHunter = item.getEquippedBy();
+            unequipItemFromHunter(item, previousHunter);
+        }
+
+        switch (item.getType()) {
+            case WEAPON:
+                if (hunter.getEquippedWeapon() != null) {
+                    hunter.getEquippedWeapon().setEquippedBy(null);
+                }
+                hunter.setEquippedWeapon(item);
+                break;
+            case ARMOR:
+                if (hunter.getEquippedArmor() != null) {
+                    hunter.getEquippedArmor().setEquippedBy(null);
+                }
+                hunter.setEquippedArmor(item);
+                break;
+            case ACCESSORY:
+                if (hunter.getEquippedAccessory() != null) {
+                    hunter.getEquippedAccessory().setEquippedBy(null);
+                }
+                hunter.setEquippedAccessory(item);
+                break;
+            default:
+                return false;
+        }
+
+        item.setEquippedBy(hunter);
+        return true;
+    }
+
+    public boolean unequipItemFromHunter(Item item, MonsterHunter hunter) {
+        if (item == null || hunter == null) return false;
+
+        switch (item.getType()) {
+            case WEAPON:
+                if (hunter.getEquippedWeapon() == item) {
+                    hunter.setEquippedWeapon(null);
+                }
+                break;
+            case ARMOR:
+                if (hunter.getEquippedArmor() == item) {
+                    hunter.setEquippedArmor(null);
+                }
+                break;
+            case ACCESSORY:
+                if (hunter.getEquippedAccessory() == item) {
+                    hunter.setEquippedAccessory(null);
+                }
+                break;
+            default:
+                return false;
+        }
+
+        if (item.getEquippedBy() == hunter) {
+            item.setEquippedBy(null);
+        }
+
+        return true;
     }
 }

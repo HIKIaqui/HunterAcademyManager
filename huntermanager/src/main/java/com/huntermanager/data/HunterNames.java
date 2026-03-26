@@ -79,7 +79,17 @@ public class HunterNames {
         "Marlon",
         "Marlene",
         "Nasir",
-        "Renato"
+        "Renato",
+        "Mário",
+        "Maria",
+        "Alonso",
+        "Mira",
+        "Peter",
+        "Pete",
+        "Luna",
+        "Estrela",
+        "Alvida",
+        "Ana"
     );
 
     private static final Random random = new Random();
