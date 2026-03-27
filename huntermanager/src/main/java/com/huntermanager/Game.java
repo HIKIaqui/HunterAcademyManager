@@ -9,9 +9,10 @@ import com.huntermanager.data.MonsterHunter;
 import com.huntermanager.data.SelectedAssignment;
 import com.huntermanager.data.enums.ItemTemplate;
 import com.huntermanager.data.enums.MonsterHunterTemplates;
-import com.huntermanager.data.enums.Trait;
-import com.huntermanager.data.enums.Trauma;
 import com.huntermanager.data.functions.TextRenderFunctions;
+import com.huntermanager.render.AcademyMenu;
+import com.huntermanager.render.AssignmentMenu;
+import com.huntermanager.render.MainMenu;
 
 public class Game {
     private Scanner scanner = new Scanner(System.in);
@@ -27,6 +28,9 @@ public class Game {
     private int selectedAssignmentSlot = -1;
 
     private final SelectedAssignment selectedAssignment = new SelectedAssignment();
+    private final MainMenu mainMenu = new MainMenu();
+    private final AcademyMenu academyMenu = new AcademyMenu();
+    private final AssignmentMenu assignmentMenu = new AssignmentMenu();
     // Menu Constants:
     private final int MainMenu = 0;
     private final int DifficultySelection = 1;
@@ -72,13 +76,13 @@ public class Game {
             switch(room){
                 case MainMenu:
                     trf.clearConsole();
-                    showMainMenu();
+                    mainMenu.showMainMenu();
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case DifficultySelection:
                     trf.clearConsole();
-                    newGameDifficultyScreen();
+                    mainMenu.newGameDifficultyScreen();
                     option = readOption();
                     selectMenuOptions(option);
                     break;
@@ -115,89 +119,89 @@ public class Game {
                     break;
                 case AcademyMainMenu:
                     trf.clearConsole();
-                    showAcademyMainMenu();
+                    academyMenu.showAcademyMainMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
 
                 case HunterManagementMenu:
                     trf.clearConsole();
-                    showHuntersMenu();
+                    academyMenu.showHuntersMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case HunterDetailsMenu:
                     trf.clearConsole();
-                    showHunterDetailsMenu();
+                    academyMenu.showHunterDetailsMenu(academy, selectedHunter, selectedHunterIndex);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case ClinicManagementMenu:
                     trf.clearConsole();
-                    showClinicMenu();
+                    academyMenu.showClinicMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case BarManagementMenu:
                     trf.clearConsole();
-                    showBarMenu();
+                    academyMenu.showBarMenu(academy);
+                    option = readOption();
+                    selectMenuOptions(option);
+                    break;
+                case StorageMenu:
+                    trf.clearConsole();
+                    academyMenu.showStorageMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case AssignmentManagementMenu:
                     trf.clearConsole();
-                    showAssignmentsMenu();
+                    assignmentMenu.showAssignmentsMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case AssignmentPreparationMenu:
                     trf.clearConsole();
-                    showAssignmentPreparationMenu();
+                    assignmentMenu.showAssignmentPreparationMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case AssignmentAddHunterMenu:
                     trf.clearConsole();
-                    showAssignmentAddHunterMenu();
+                    assignmentMenu.showAssignmentAddHunterMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case AssignmentRemoveHunterMenu:
                     trf.clearConsole();
-                    showAssignmentRemoveHunterMenu();
+                    assignmentMenu.showAssignmentRemoveHunterMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
                 case AssignmentSetPositionMenu:
                     trf.clearConsole();
-                    showAssignmentSetPositionMenu();
+                    assignmentMenu.showAssignmentSetPositionMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
 
                 case AssignmentChoosePositionMenu:
                     trf.clearConsole();
-                    showAssignmentChoosePositionMenu();
+                    assignmentMenu.showAssignmentChoosePositionMenu(academy, selectedAssignment, selectedAssignmentSlot);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
 
                 case AssignmentSetCombatStyleMenu:
                     trf.clearConsole();
-                    showAssignmentSetCombatStyleMenu();
+                    assignmentMenu.showAssignmentSetCombatStyleMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
 
                 case AssignmentChooseCombatStyleMenu:
                     trf.clearConsole();
-                    showAssignmentChooseCombatStyleMenu();
-                    option = readOption();
-                    selectMenuOptions(option);
-                    break;
-                case StorageMenu:
-                    trf.clearConsole();
-                    showStorageMenu();
+                    assignmentMenu.showAssignmentChooseCombatStyleMenu(academy, selectedAssignment, selectedAssignmentSlot);
                     option = readOption();
                     selectMenuOptions(option);
                     break;
@@ -586,474 +590,5 @@ public class Game {
         academy.addItem(Item.fromTemplate(ItemTemplate.LEATHER_ARMOR));
         academy.addItem(Item.fromTemplate(ItemTemplate.LUCKY_CHARM));
         academy.addItem(Item.fromTemplate(ItemTemplate.BASIC_MEDKIT));
-    }
-
-// ======================================== MENU DESIGNS ========================================
-
-    private void showMainMenu() {
-        System.out.println("\n==== O DIRETOR NOS VALES ====");
-        System.out.println("1 - Novo jogo");
-        System.out.println("2 - Carregar Jogo");
-        System.out.println("3 - Opções");
-        System.out.println("0 - Sair");
-        System.out.println("=============================");
-        System.out.print("Escolha uma opção: ");
-    }
-
-    private void newGameDifficultyScreen() {
-        System.out.println("\n=== DIFICULDADE ===");
-
-        System.out.println("\n1 - Superfície");
-        System.out.println("    -> Dificuldade Menos Punitiva.");
-        System.out.println("    -> O mundo é muito menos perigoso, e consequências são menos graves.");
-        System.out.println("    -> Não é a experiência recomendada e idealizada para o jogo.");
-        System.out.println("    -> Os Vales são sobre dor e sofrimento. Essa dificuldade dilui a mensagem.");
-
-        System.out.println("\n2 - Vales");
-        System.out.println("    -> Dificuldade Padrão.");
-        System.out.println("    -> O mundo é extremamente punitivo e consequências são na maioria das vezes permanentes.");
-        System.out.println("    -> Experiência recomendada para sentir os vales em primeira mão.");
-
-        System.out.println("\n3 - Fundo do Poço");
-        System.out.println("    -> Dificuldade Brutal");
-        System.out.println("    -> O mundo não se contém.");
-        System.out.println("    -> Erros são severos e irreversíveis.");
-        System.out.println("    -> Requer conhecimento profundo das mecânicas do jogo.");
-        System.out.println("    -> Experiência não recomendada para ninguém.");
-        System.out.println("    -> Sobrevivência não é esperada.");
-        
-        System.out.println("\n------------------");
-        System.out.println("0 - Voltar");
-        System.out.println("==================");
-        System.out.println("\nEscolha uma opção: ");
-    }
-
-    private void showAcademyMainMenu() {
-        System.out.println("\n===== ACADEMIA DE CAÇADORES =====\n");
-
-        String time = switch (academy.getCurrentDayTime()) {
-            case HunterAcademy.MORNING -> "Manhã";
-            case HunterAcademy.AFTERNOON -> "Tarde";
-            case HunterAcademy.NIGHT -> "Noite";
-            default -> "???";
-        };
-        System.out.println("Dia: " + academy.getCurrentDay() + " (" + time + ")");
-        System.out.println("Estrelas: " + academy.getStars());
-        System.out.println("Caçadores: " + academy.getHunterCount() + "/" + academy.getMaxRoster());
-
-        System.out.println("\n1 - Caçadores");
-        System.out.println("2 - Contratos");
-        System.out.println("3 - Clínica");
-        System.out.println("4 - Bar");
-        System.out.println("5 - Armazém");
-        System.out.println("6 - Passar Tempo");
-        System.out.println("7 - Status da Academia");
-        System.out.println("0 - Voltar ao Menu Principal");
-
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showHuntersMenu() {
-        System.out.println("\n=== CAÇADORES ===\n");
-        MonsterHunter[] hunters = academy.getActiveHunters();
-
-        if (hunters.length == 0) {
-            System.out.println("Nenhum caçador disponível.");
-        } else {
-            for (int i = 0; i < hunters.length; i++) {
-                MonsterHunter hunter = hunters[i];
-                int hunterIndex = academy.getHunterIndex(hunter);
-                String localizacao;
-                if (academy.isHunterInBar(hunterIndex)) {
-                    localizacao = "Bar";
-                } 
-                else if (academy.isHunterInClinic(hunterIndex)) {
-                    localizacao = "Clínica"; 
-                }
-                else {localizacao = "Livre";}
-                if ("Livre".equals(localizacao)) {
-                    System.out.println((i + 1) + " - " + hunter.getName());
-                }
-                else {
-                    System.out.println((i + 1) + " - " + hunter.getName() + " (" + localizacao + ")");
-                }
-                
-                System.out.println("    HP: " + hunter.getHP() + "/" + hunter.getMaxHP()
-                        + " | PE: " + hunter.getPE() + "/" + hunter.getMaxPE()
-                        + " | Estresse: " + hunter.getStress() + "/" + hunter.getMaxStress());
-                System.out.println();
-            }
-        }
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showHunterDetailsMenu() {
-        if (selectedHunter == null) {
-            System.out.println("Nenhum caçador selecionado.");
-            return;
-        }
-
-        System.out.println("\n=== FICHA DO CAÇADOR ===\n");
-
-        System.out.println("Nome: " + selectedHunter.getName());
-        System.out.println("HP: " + selectedHunter.getHP() + "/" + selectedHunter.getMaxHP());
-        System.out.println("PE: " + selectedHunter.getPE() + "/" + selectedHunter.getMaxPE());
-        System.out.println("Estresse: " + selectedHunter.getStress() + "/" + selectedHunter.getMaxStress());
-
-        System.out.println("\n--- ATRIBUTOS ---");
-        System.out.println("Constituição: " + selectedHunter.getConstitution());
-        System.out.println("Agilidade: " + selectedHunter.getAgility());
-        System.out.println("Mente: " + selectedHunter.getMind());
-        System.out.println("Social: " + selectedHunter.getSocial());
-        System.out.println("Sorte: " + selectedHunter.getLuck());
-
-        System.out.println("\n--- CARACTERÍSTICAS ---");
-            if (selectedHunter.getTraits().isEmpty()) {
-                System.out.println("Nenhuma.");
-            } else {
-                for (Trait trait : selectedHunter.getTraits()) {
-                    System.out.println("-> " + trait.getDisplayName());
-                }
-            }
-
-        System.out.println("\n--- TRAUMAS ---");
-            if (selectedHunter.getTraumas().isEmpty()) {
-                System.out.println("Nenhum.");
-            } else {
-                for (Trauma trauma : selectedHunter.getTraumas()) {
-                    System.out.println("-> " + trauma.getDisplayName());
-                }
-            }
-
-        System.out.println("\n--- SITUAÇÃO ---");
-            if (academy.isHunterInBar(selectedHunterIndex)) {
-                System.out.println("< No Bar até o fim do Ciclo >");
-            } else if (academy.isHunterInClinic(selectedHunterIndex)) {
-                System.out.println("< Na Clínica até o fim do Ciclo >");
-            } else {
-                System.out.println("< Livre >");
-            }
-
-        System.out.println("\n--- OPÇÕES ---");
-        System.out.println("1 - Enviar para a Clínica");
-        System.out.println("2 - Enviar para o Bar");
-        System.out.println("3 - Ver mais detalhes");
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showClinicMenu() {
-        System.out.println("\n=== CLÍNICA ===\n");
-        System.out.println("Caçadores alocados aqui permanecem indisponíveis até o fim do ciclo.\n");
-
-        int[] clinicSlots = academy.getClinicSlots();
-
-        for (int i = 0; i < clinicSlots.length; i++) {
-            int hunterIndex = clinicSlots[i];
-
-            if (hunterIndex == -1) {
-                System.out.println((i + 1) + " - [Vazio]\n");
-            } else {
-                MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
-                int recoveryHP = 8 + (hunter.getConstitution() * 2);
-                int recoveryStress = 1 * (Math.max(0, hunter.getSocial() - 1));
-
-                System.out.println((i + 1) + " - " + hunter.getName());
-                System.out.println("    HP atual: " + hunter.getHP() + "/" + hunter.getMaxHP());
-                if (recoveryStress > 0) { System.out.println("    Recuperação prevista: +" + recoveryHP + " HP e -" + recoveryStress + " Estresse\n"); }
-                else { System.out.println("    Recuperação prevista: +" + recoveryHP + " HP\n"); }
-            }
-        }
-
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showBarMenu() {
-        System.out.println("\n=== BAR ===\n");
-        System.out.println("Caçadores alocados aqui permanecem indisponíveis até o fim do ciclo.\n");
-
-        int[] barSlots = academy.getBarSlots();
-
-        for (int i = 0; i < barSlots.length; i++) {
-            int hunterIndex = barSlots[i];
-
-            if (hunterIndex == -1) {
-                System.out.println((i + 1) + " - [Vazio]\n");
-            } else {
-                MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
-                int recoveryStress = 1 + hunter.getSocial();
-                int recoveryPE = 2 * (Math.max(0, hunter.getMind() - 1));
-
-                System.out.println((i + 1) + " - " + hunter.getName());
-                System.out.println("    Estresse atual: " + hunter.getStress() + "/" + hunter.getMaxStress());
-                if (recoveryPE > 0) { System.out.println("    Recuperação prevista: -" + recoveryStress + " Estresse e +" + recoveryPE + " PE\n"); }
-                    else { System.out.println("    Recuperação prevista: -" + recoveryStress + " Estresse\n"); }
-            }
-        }
-
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.print("\nEscolha uma opção: ");
-    }
-    private void showAssignmentsMenu() {
-        System.out.println("\n=== CONTRATOS ===\n");
-
-        Assignment[] assignments = academy.getAvailableAssignments();
-
-        for (int i = 0; i < assignments.length; i++) {
-            Assignment a = assignments[i];
-
-            if (a != null) {
-                System.out.println((i + 1) + " - " + a.getTitle());
-                System.out.println("    Dificuldade: " + a.getDifficulty());
-                System.out.println("    Ameaça principal: " + a.getMainThreat().getDisplayName());
-                System.out.println("    " + a.getDescription());
-                System.out.println();
-            }
-        }
-
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showAssignmentPreparationMenu() {
-        System.out.println("\n=== PREPARAÇÃO DO CONTRATO ===\n");
-
-        Assignment assignment = selectedAssignment.getAssignment();
-
-        if (assignment == null) {
-            System.out.println("Nenhum contrato selecionado.");
-            System.out.println("\n------------");
-            System.out.println("0 - Voltar");
-            System.out.println("============");
-            System.out.print("\nEscolha uma opção: ");
-            return;
-        }
-
-        System.out.println("Contrato: " + assignment.getTitle());
-        System.out.println("Dificuldade: " + assignment.getDifficulty());
-        System.out.println("Ameaça principal: " + assignment.getMainThreat().getDisplayName());
-        System.out.println("Descrição: " + assignment.getDescription());
-
-        System.out.println("\n--- EQUIPE ENVIADA ---");
-
-        for (int i = 0; i < 3; i++) {
-            int hunterIndex = selectedAssignment.getHunterAt(i);
-
-            if (hunterIndex == -1) {
-                System.out.println((i + 1) + " - [Vazio]");
-                System.out.println("    Posição: [Não definida]");
-                System.out.println("    Estilo: [Não definido]");
-            } else {
-                MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
-                System.out.println((i + 1) + " - " + hunter.getName());
-                System.out.println("    Posição: " + SelectedAssignment.getPositionName(selectedAssignment.getPositionAt(i)));
-                System.out.println("    Estilo: " + SelectedAssignment.getCombatStyleName(selectedAssignment.getCombatStyleAt(i)));
-            }
-
-            System.out.println();
-        }
-
-        System.out.println("\n--- OPÇÕES ---");
-        System.out.println("1 - Adicionar Caçador");
-        System.out.println("2 - Remover Caçador");
-        System.out.println("3 - Definir Posições");
-        System.out.println("4 - Definir Estilos de Combate");
-        System.out.println("5 - Confirmar Envio");
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showAssignmentAddHunterMenu() {
-        System.out.println("\n=== ADICIONAR CAÇADOR ===\n");
-
-        int[] availableIndexes = academy.getAvailableHunterIndexesForAssignment();
-        int visibleOption = 1;
-        boolean hasAny = false;
-
-        for (int hunterIndex : availableIndexes) {
-            if (!selectedAssignment.isHunterAlreadySelected(hunterIndex)) {
-                MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
-
-                System.out.println(visibleOption + " - " + hunter.getName());
-                System.out.println("    HP: " + hunter.getHP() + "/" + hunter.getMaxHP()
-                        + " | PE: " + hunter.getPE() + "/" + hunter.getMaxPE()
-                        + " | Estresse: " + hunter.getStress() + "/" + hunter.getMaxStress());
-                System.out.println();
-
-                visibleOption++;
-                hasAny = true;
-            }
-        }
-
-        if (!hasAny) {
-            System.out.println("Nenhum caçador disponível.");
-        }
-
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showAssignmentRemoveHunterMenu() {
-        System.out.println("\n=== REMOVER CAÇADOR ===\n");
-
-        for (int i = 0; i < 3; i++) {
-            int hunterIndex = selectedAssignment.getHunterAt(i);
-
-            if (hunterIndex == -1) {
-                System.out.println((i + 1) + " - [Vazio]");
-            } else {
-                MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
-                System.out.println((i + 1) + " - " + hunter.getName());
-            }
-        }
-
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showAssignmentSetPositionMenu() {
-        System.out.println("\n=== DEFINIR POSIÇÕES ===\n");
-
-        for (int i = 0; i < 3; i++) {
-            int hunterIndex = selectedAssignment.getHunterAt(i);
-
-            if (hunterIndex == -1) {
-                System.out.println((i + 1) + " - [Vazio]");
-            } else {
-                MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
-                System.out.println((i + 1) + " - " + hunter.getName()
-                        + " | Posição atual: "
-                        + SelectedAssignment.getPositionName(selectedAssignment.getPositionAt(i)));
-            }
-        }
-
-        System.out.println("\nEscolha o slot para alterar.");
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.print("\nEscolha uma opção: ");
-    }
-    
-    private void showAssignmentChoosePositionMenu() {
-        System.out.println("\n=== ESCOLHER POSIÇÃO ===\n");
-
-        if (selectedAssignmentSlot == -1 || !selectedAssignment.hasHunterInSlot(selectedAssignmentSlot)) {
-            System.out.println("Nenhum slot válido selecionado.");
-            System.out.println("\n------------");
-            System.out.println("0 - Voltar");
-            System.out.println("============");
-            System.out.print("\nEscolha uma opção: ");
-            return;
-        }
-
-        MonsterHunter hunter = academy.getHunterByIndex(
-                selectedAssignment.getHunterAt(selectedAssignmentSlot)
-        );
-
-        System.out.println("Caçador: " + hunter.getName());
-        System.out.println("Posição atual: "
-                + SelectedAssignment.getPositionName(
-                        selectedAssignment.getPositionAt(selectedAssignmentSlot)
-                ));
-
-        System.out.println("\n1 - Frente");
-        System.out.println("2 - Meio");
-        System.out.println("3 - Retaguarda");
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showAssignmentSetCombatStyleMenu() {
-        System.out.println("\n=== DEFINIR ESTILO DE COMBATE ===\n");
-
-        for (int i = 0; i < 3; i++) {
-            int hunterIndex = selectedAssignment.getHunterAt(i);
-
-            if (hunterIndex == -1) {
-                System.out.println((i + 1) + " - [Vazio]");
-            } else {
-                MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
-                System.out.println((i + 1) + " - " + hunter.getName()
-                        + " | Estilo atual: "
-                        + SelectedAssignment.getCombatStyleName(selectedAssignment.getCombatStyleAt(i)));
-            }
-        }
-
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-    }
-
-    private void showAssignmentChooseCombatStyleMenu() {
-        System.out.println("\n=== ESCOLHER ESTILO DE COMBATE ===\n");
-
-        if (selectedAssignmentSlot == -1 || !selectedAssignment.hasHunterInSlot(selectedAssignmentSlot)) {
-            System.out.println("Nenhum slot válido selecionado.");
-            System.out.println("\n------------");
-            System.out.println("0 - Voltar");
-            System.out.println("============");
-            System.out.print("\nEscolha uma opção: ");
-            return;
-        }
-
-        MonsterHunter hunter = academy.getHunterByIndex(
-                selectedAssignment.getHunterAt(selectedAssignmentSlot)
-        );
-
-        System.out.println("Caçador: " + hunter.getName());
-        System.out.println("Estilo atual: "
-                + SelectedAssignment.getCombatStyleName(
-                        selectedAssignment.getCombatStyleAt(selectedAssignmentSlot)
-                ));
-
-        System.out.println("\n1 - Corpo a Corpo");
-        System.out.println("2 - À Distância");
-        System.out.println("3 - Suporte");
-        System.out.println("4 - Magia");
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.print("\nEscolha uma opção: ");
-    }
-
-    private void showStorageMenu() {
-        System.out.println("\n======= ARMAZÉM =======\n");
-
-        for (Item item : academy.getActiveItems()) {
-            System.out.print(item.getName() + " - " + item.getType());
-
-            if (item.isEquipped()) {
-                System.out.println(" [Equipado por " + item.getEquippedBy().getName() + "]");
-            } else {
-                System.out.println(" [Livre]");
-            }
-        }
-        System.out.println("\n------------");
-        System.out.println("0 - Voltar");
-        System.out.println("============");
-        System.out.println("\nEscolha uma opção: ");
     }
 }

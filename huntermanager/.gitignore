@@ -1,7 +1,7 @@
 target/
 *.tmp
 *.swp
-
+lib/
 .idea/
 .vscode/
 *iml
