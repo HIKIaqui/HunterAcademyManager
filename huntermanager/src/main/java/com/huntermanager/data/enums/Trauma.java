@@ -9,6 +9,7 @@ public enum Trauma {
 
     private final String displayName;
     private final String description;
+    
     Trauma(String displayName, String description) {
         this.displayName = displayName;
         this.description = description;

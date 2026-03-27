@@ -20,7 +20,6 @@ public class Game {
     private int room = 0;
     int option;
     TextRenderFunctions trf = new TextRenderFunctions();
-    SelectedAssignment sa = new SelectedAssignment();
 
     private HunterAcademy academy;
     private MonsterHunter selectedHunter;
@@ -74,137 +73,135 @@ public class Game {
     public void startGame() {
         while(running) {
             switch(room){
-                case MainMenu:
+                case MainMenu -> {
                     trf.clearConsole();
                     mainMenu.showMainMenu();
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case DifficultySelection:
+                }
+                case DifficultySelection -> {
                     trf.clearConsole();
                     mainMenu.newGameDifficultyScreen();
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case DifficultyOpeningText:
+                }
+                case DifficultyOpeningText -> {
                     trf.clearConsole();
                     if (null == difficulty) { System.out.print("Algo deu errado. A dificuldade não foi configurada. Tente reiniciar o jogo e tentar de novo. (E me envia o log)"); }
                     else switch (difficulty) {
-                        case EASY:
+                        case EASY -> {
                             System.out.print("O mundo será gentil com você.");
                             trf.sleep(1000);
                             System.out.print("\nA mensagem passada pode acabar distorcida.");
                             trf.sleep(1000);
                             System.out.print("\nA escolha foi sua.");
-                            break;
-                        case NORMAL:
+                        }
+                        case NORMAL -> {
                             System.out.print("A dificuldade padrão foi escolhida.");
                             trf.sleep(1000);
                             System.out.print("\nBoa escolha.");
                             trf.sleep(1000);
                             System.out.print("\nBoa sorte.");
-                            break;
-                        case HARD:
+                        }
+                        case HARD -> {
                             System.out.print("\nNenhuma concessão será feita.");
                             trf.sleep(1000);
                             System.out.print("\nVocê foi avisado.");
-                            break;
-                        default:
-                            System.out.print("Algo deu errado. A dificuldade não foi configurada. Tente reiniciar o jogo e tentar de novo. (E me envia o log)");
-                            break;
+                        }
+                        default -> System.out.print("Algo deu errado. A dificuldade não foi configurada. Tente reiniciar o jogo e tentar de novo. (E me envia o log)");
                     }
                     setupNewGame();
                     trf.sleep(1500);
                     room = AcademyMainMenu;
-                    break;
-                case AcademyMainMenu:
+                }
+                case AcademyMainMenu -> {
                     trf.clearConsole();
                     academyMenu.showAcademyMainMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
+                }
 
-                case HunterManagementMenu:
+                case HunterManagementMenu -> {
                     trf.clearConsole();
                     academyMenu.showHuntersMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case HunterDetailsMenu:
+                }
+                case HunterDetailsMenu -> {
                     trf.clearConsole();
                     academyMenu.showHunterDetailsMenu(academy, selectedHunter, selectedHunterIndex);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case ClinicManagementMenu:
+                }
+                case ClinicManagementMenu -> {
                     trf.clearConsole();
                     academyMenu.showClinicMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case BarManagementMenu:
+                }
+                case BarManagementMenu -> {
                     trf.clearConsole();
                     academyMenu.showBarMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case StorageMenu:
+                }
+                case StorageMenu -> {
                     trf.clearConsole();
                     academyMenu.showStorageMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case AssignmentManagementMenu:
+                }
+                case AssignmentManagementMenu -> {
                     trf.clearConsole();
                     assignmentMenu.showAssignmentsMenu(academy);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case AssignmentPreparationMenu:
+                }
+                case AssignmentPreparationMenu -> {
                     trf.clearConsole();
                     assignmentMenu.showAssignmentPreparationMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case AssignmentAddHunterMenu:
+                }
+                case AssignmentAddHunterMenu -> {
                     trf.clearConsole();
                     assignmentMenu.showAssignmentAddHunterMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case AssignmentRemoveHunterMenu:
+                }
+                case AssignmentRemoveHunterMenu -> {
                     trf.clearConsole();
                     assignmentMenu.showAssignmentRemoveHunterMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
-                case AssignmentSetPositionMenu:
+                }
+                case AssignmentSetPositionMenu -> {
                     trf.clearConsole();
                     assignmentMenu.showAssignmentSetPositionMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
+                }
 
-                case AssignmentChoosePositionMenu:
+                case AssignmentChoosePositionMenu -> {
                     trf.clearConsole();
                     assignmentMenu.showAssignmentChoosePositionMenu(academy, selectedAssignment, selectedAssignmentSlot);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
+                }
 
-                case AssignmentSetCombatStyleMenu:
+                case AssignmentSetCombatStyleMenu -> {
                     trf.clearConsole();
                     assignmentMenu.showAssignmentSetCombatStyleMenu(academy, selectedAssignment);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
+                }
 
-                case AssignmentChooseCombatStyleMenu:
+                case AssignmentChooseCombatStyleMenu -> {
                     trf.clearConsole();
                     assignmentMenu.showAssignmentChooseCombatStyleMenu(academy, selectedAssignment, selectedAssignmentSlot);
                     option = readOption();
                     selectMenuOptions(option);
-                    break;
+                }
             }            
         }
     }
@@ -213,68 +210,51 @@ public class Game {
 
     public void selectMenuOptions(int option) {
         switch(room){
-            case MainMenu:
+            case MainMenu -> {
                 switch(option) {
-                    case 1:
-                        room = DifficultySelection;
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 0: 
-                        running = false;
-                        break;
+                    case 1 -> room = DifficultySelection;
+                    case 2 -> {
+                    }
+                    case 3 -> {
+                    }
+                    case 0 -> running = false;
                 }
-                break;
-            case DifficultySelection:
+            }
+
+            case DifficultySelection -> {
                 switch(option) {
-                    case 1:
+                    case 1 -> {
                         difficulty = Difficulty.EASY;
                         room = DifficultyOpeningText;
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         difficulty = Difficulty.NORMAL;
                         room = DifficultyOpeningText;
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         difficulty = Difficulty.HARD;
                         room = DifficultyOpeningText;
-                        break;
-                    case 0: 
-                        room = MainMenu;
-                        break;
+                    }
+                    case 0 -> room = MainMenu;
                 }
-                break;
+            }
 
-            case AcademyMainMenu:
+
+            case AcademyMainMenu -> {
                 switch(option) {
-                    case 1:
-                        room = HunterManagementMenu;
-                        break;
-                    case 2:
-                        room = AssignmentManagementMenu;
-                        break;
-                    case 3:
-                        room = ClinicManagementMenu;
-                        break;
-                    case 4:
-                        room = BarManagementMenu;
-                        break;
-                    case 5:
-                        room = StorageMenu;
-                        break;
-                    case 6:
-                        academy.advanceDayTime();
-                        break;
-                    case 7:
-                        break;
-                    case 0:
-                        room = MainMenu;
-                        break;
+                    case 1 -> room = HunterManagementMenu;
+                    case 2 -> room = AssignmentManagementMenu;
+                    case 3 -> room = ClinicManagementMenu;
+                    case 4 -> room = BarManagementMenu;
+                    case 5 -> room = StorageMenu;
+                    case 6 -> academy.advanceDayTime();
+                    case 7 -> {
+                    }
+                    case 0 -> room = MainMenu;
                 }
-                break;
-            case HunterManagementMenu:
+            }
+
+            case HunterManagementMenu -> {
                 if (option == 0) {
                     room = AcademyMainMenu;
                 } else {
@@ -286,14 +266,14 @@ public class Game {
                         room = HunterDetailsMenu;
                     }
                 }
-                break;
-            case HunterDetailsMenu:
+            }
+            case HunterDetailsMenu -> {
                 switch(option) {
-                    case 0:
+                    case 0 -> {
                         selectedHunter = null;
                         room = HunterManagementMenu;
-                        break;
-                    case 1:
+                    }
+                    case 1 -> {
                         if (selectedHunterIndex != -1) {
                             if (!academy.isHunterInClinic(selectedHunterIndex) && !academy.isHunterInBar(selectedHunterIndex)){
                                 if (academy.isClinicFull()) {
@@ -306,7 +286,7 @@ public class Game {
                             } else { 
                                 if (academy.isHunterInClinic(selectedHunterIndex)) {
                                     
-                                System.out.println("\n" + selectedHunter.getName() + " já está na clínica");
+                                    System.out.println("\n" + selectedHunter.getName() + " já está na clínica");
                                 } else if (academy.isHunterInBar(selectedHunterIndex)) {
 
                                     System.out.println("\n" + selectedHunter.getName() + " já está no bar");
@@ -316,8 +296,8 @@ public class Game {
                             System.out.println("\nErro: caçador não encontrado no roster.");
                         }
                         trf.sleep(1000);
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         if (selectedHunterIndex != -1) {
                             if (!academy.isHunterInClinic(selectedHunterIndex) && !academy.isHunterInBar(selectedHunterIndex)){
                                 if (academy.isBarFull()) {
@@ -329,8 +309,8 @@ public class Game {
                                 }
                             } else { 
                                 if (academy.isHunterInClinic(selectedHunterIndex)) {
-                                
-                                System.out.println("\n" + selectedHunter.getName() + " já está na clínica");
+                                    
+                                    System.out.println("\n" + selectedHunter.getName() + " já está na clínica");
                                 } else if (academy.isHunterInBar(selectedHunterIndex)) {
 
                                     System.out.println("\n" + selectedHunter.getName() + " já está no bar");
@@ -340,28 +320,27 @@ public class Game {
                             System.out.println("\nErro: caçador não encontrado no roster.");
                         }
                         trf.sleep(1000);
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         System.out.println("\nEssa opção ainda não foi implementada.");
                         trf.sleep(1000);
-                        break;
+                    }
                 }
-                break;
-            case ClinicManagementMenu:
+            }
+
+            case ClinicManagementMenu -> {
                 switch (option) {
-                    case 0:
-                        room = AcademyMainMenu;
-                        break;
+                    case 0 -> room = AcademyMainMenu;
                 }
-                break;
-            case BarManagementMenu:
+            }
+
+            case BarManagementMenu -> {
                 switch (option) {
-                    case 0:
-                        room = AcademyMainMenu;
-                        break;
+                    case 0 -> room = AcademyMainMenu;
                 }
-                break;
-            case AssignmentManagementMenu:
+            }
+
+            case AssignmentManagementMenu -> {
                 if (option == 0) {
                     room = AcademyMainMenu;
                 } else {
@@ -373,38 +352,31 @@ public class Game {
                         room = AssignmentPreparationMenu;
                     }
                 }
-                break;
-            case AssignmentPreparationMenu:
+            }
+            case AssignmentPreparationMenu -> {
                 switch(option) {
-                    case 0:
+                    case 0 -> {
                         selectedAssignment.clear();
                         selectedAssignmentSlot = -1;
                         room = AssignmentManagementMenu;
-                        break;
-                    case 1:
-                        room = AssignmentAddHunterMenu;
-                        break;
-                    case 2:
-                        room = AssignmentRemoveHunterMenu;
-                        break;
-                    case 3:
-                        room = AssignmentSetPositionMenu;
-                        break;
-                    case 4:
-                        room = AssignmentSetCombatStyleMenu;
-                        break;
-                    case 5:
+                    }
+                    case 1 -> room = AssignmentAddHunterMenu;
+                    case 2 -> room = AssignmentRemoveHunterMenu;
+                    case 3 -> room = AssignmentSetPositionMenu;
+                    case 4 -> room = AssignmentSetCombatStyleMenu;
+                    case 5 -> {
                         if (selectedAssignment.isReady()) {
                             System.out.println("\nEquipe pronta. Envio ainda não foi implementado.");
                         } else {
                             System.out.println("\nA equipe ainda não está pronta. Defina posição e estilo para todos os caçadores enviados.");
                         }
                         trf.sleep(1200);
-                        break;
+                    }
                 }
-                break;
+            }
+
             
-            case AssignmentAddHunterMenu:
+            case AssignmentAddHunterMenu -> {
                 if (option == 0) {
                     room = AssignmentPreparationMenu;
                 } else {
@@ -434,9 +406,9 @@ public class Game {
 
                     room = AssignmentPreparationMenu;
                 }
-                break;
+            }
             
-            case AssignmentRemoveHunterMenu:
+            case AssignmentRemoveHunterMenu -> {
                 if (option == 0) {
                     room = AssignmentPreparationMenu;
                 } else {
@@ -451,8 +423,8 @@ public class Game {
                     trf.sleep(500);
                     room = AssignmentPreparationMenu;
                 }
-                break;
-            case AssignmentSetPositionMenu:
+            }
+            case AssignmentSetPositionMenu -> {
                 if (option == 0) {
                     room = AssignmentPreparationMenu;
                 } else {
@@ -466,37 +438,38 @@ public class Game {
                         trf.sleep(500);
                     }
                 }
-                break;
-            case AssignmentChoosePositionMenu:
+            }
+            case AssignmentChoosePositionMenu -> {
                 switch(option) {
-                    case 0:
+                    case 0 -> {
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetPositionMenu;
-                        break;
-                    case 1:
+                    }
+                    case 1 -> {
                         selectedAssignment.setPosition(selectedAssignmentSlot, 0); // Frente
                         System.out.println("\nPosição definida como Frente.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetPositionMenu;
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         selectedAssignment.setPosition(selectedAssignmentSlot, 1); // Meio
                         System.out.println("\nPosição definida como Meio.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetPositionMenu;
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         selectedAssignment.setPosition(selectedAssignmentSlot, 2); // Retaguarda
                         System.out.println("\nPosição definida como Retaguarda.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetPositionMenu;
-                        break;
+                    }
                 }
-                break;
-            case AssignmentSetCombatStyleMenu:
+            }
+
+            case AssignmentSetCombatStyleMenu -> {
                 if (option == 0) {
                     room = AssignmentPreparationMenu;
                 } else {
@@ -510,50 +483,50 @@ public class Game {
                         trf.sleep(500);
                     }
                 }
-                break;
-            case AssignmentChooseCombatStyleMenu:
+            }
+            case AssignmentChooseCombatStyleMenu -> {
                 switch(option) {
-                    case 0:
+                    case 0 -> {
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetCombatStyleMenu;
-                        break;
-                    case 1:
+                    }
+                    case 1 -> {
                         selectedAssignment.setCombatStyle(selectedAssignmentSlot, 0); // Corpo a Corpo
                         System.out.println("\nEstilo definido como Corpo a Corpo.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetCombatStyleMenu;
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         selectedAssignment.setCombatStyle(selectedAssignmentSlot, 1); // À Distância
                         System.out.println("\nEstilo definido como À Distância.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetCombatStyleMenu;
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         selectedAssignment.setCombatStyle(selectedAssignmentSlot, 2); // Suporte
                         System.out.println("\nEstilo definido como Suporte.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetCombatStyleMenu;
-                        break;
-                    case 4:
+                    }
+                    case 4 -> {
                         selectedAssignment.setCombatStyle(selectedAssignmentSlot, 3); // Magia
                         System.out.println("\nEstilo definido como Magia.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetCombatStyleMenu;
-                        break;
+                    }
                 }
-                break;
-            case StorageMenu:
+            }
+
+            case StorageMenu -> {
                 switch (option) {
-                    case 0:
-                        room = AcademyMainMenu;
-                        break;
+                    case 0 -> room = AcademyMainMenu;
                 }
-                break;
+            }
+
         }
     }
 
