@@ -493,6 +493,7 @@ public class HunterAcademy {
         return -1;
     }
 
+// RETORNA O REAL NÚMERO DE ITENS NO INVENTÁRIO
     public Item[] getActiveItems() {
         int count = getInventoryCount();
         Item[] active = new Item[count];

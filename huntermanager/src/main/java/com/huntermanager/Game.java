@@ -6,6 +6,7 @@ import com.huntermanager.data.Assignment;
 import com.huntermanager.data.HunterAcademy;
 import com.huntermanager.data.Item;
 import com.huntermanager.data.MonsterHunter;
+import com.huntermanager.data.SelectedAssignment;
 import com.huntermanager.data.enums.ItemTemplate;
 import com.huntermanager.data.enums.MonsterHunterTemplates;
 import com.huntermanager.data.enums.Trait;
@@ -18,16 +19,14 @@ public class Game {
     private int room = 0;
     int option;
     TextRenderFunctions trf = new TextRenderFunctions();
+    SelectedAssignment sa = new SelectedAssignment();
 
     private HunterAcademy academy;
     private MonsterHunter selectedHunter;
     private int selectedHunterIndex;
-    private Assignment selectedAssignment;
-    private int[] selectedHuntersForAssignment = {-1, -1, -1};
-    private int[] selectedPositionsForAssignment = {-1, -1, -1};
-    private int[] selectedCombatStyles = {-1, -1, -1};
     private int selectedAssignmentSlot = -1;
 
+    private final SelectedAssignment selectedAssignment = new SelectedAssignment();
     // Menu Constants:
     private final int MainMenu = 0;
     private final int DifficultySelection = 1;
@@ -365,13 +364,8 @@ public class Game {
                     Assignment[] assignments = academy.getAvailableAssignments();
 
                     if (option >= 1 && option <= assignments.length && assignments[option - 1] != null) {
-                        selectedAssignment = assignments[option - 1];
-
                         // limpa seleção anterior
-                        selectedHuntersForAssignment = new int[] {-1, -1, -1};
-                        selectedPositionsForAssignment = new int[] {-1, -1, -1};
-                        selectedCombatStyles = new int[] {-1, -1, -1};
-
+                        selectedAssignment.selectAssignment(assignments[option - 1]);
                         room = AssignmentPreparationMenu;
                     }
                 }
@@ -379,10 +373,8 @@ public class Game {
             case AssignmentPreparationMenu:
                 switch(option) {
                     case 0:
-                        selectedAssignment = null;
-                        selectedHuntersForAssignment = new int[] {-1, -1, -1};
-                        selectedPositionsForAssignment = new int[] {-1, -1, -1};
-                        selectedCombatStyles = new int[] {-1, -1, -1};
+                        selectedAssignment.clear();
+                        selectedAssignmentSlot = -1;
                         room = AssignmentManagementMenu;
                         break;
                     case 1:
@@ -398,7 +390,7 @@ public class Game {
                         room = AssignmentSetCombatStyleMenu;
                         break;
                     case 5:
-                        if (isAssignmentReady()) {
+                        if (selectedAssignment.isReady()) {
                             System.out.println("\nEquipe pronta. Envio ainda não foi implementado.");
                         } else {
                             System.out.println("\nA equipe ainda não está pronta. Defina posição e estilo para todos os caçadores enviados.");
@@ -418,7 +410,7 @@ public class Game {
                     int chosenHunterIndex = -1;
 
                     for (int hunterIndex : availableIndexes) {
-                        if (!isHunterAlreadySelectedForAssignment(hunterIndex)) {
+                        if (!selectedAssignment.isHunterAlreadySelected(hunterIndex)) {
                             visibleCount++;
                             if (visibleCount == option) {
                                 chosenHunterIndex = hunterIndex;
@@ -428,7 +420,7 @@ public class Game {
                     }
 
                     if (chosenHunterIndex != -1) {
-                        if (addHunterToSelectedAssignment(chosenHunterIndex)) {
+                        if (selectedAssignment.addHunter(chosenHunterIndex)) {
                             System.out.println("\nCaçador adicionado à equipe.");
                         } else {
                             System.out.println("\nNão foi possível adicionar o caçador.");
@@ -446,7 +438,7 @@ public class Game {
                 } else {
                     int slotIndex = option - 1;
 
-                    if (removeHunterFromSelectedAssignment(slotIndex)) {
+                    if (selectedAssignment.removeHunter(slotIndex)) {
                         System.out.println("\nCaçador removido da equipe.");
                     } else {
                         System.out.println("\nNão foi possível remover o caçador.");
@@ -462,8 +454,7 @@ public class Game {
                 } else {
                     int slotIndex = option - 1;
 
-                    if (slotIndex >= 0 && slotIndex < selectedHuntersForAssignment.length
-                            && selectedHuntersForAssignment[slotIndex] != -1) {
+                    if (selectedAssignment.hasHunterInSlot(slotIndex)) {
                         selectedAssignmentSlot = slotIndex;
                         room = AssignmentChoosePositionMenu;
                     } else {
@@ -479,21 +470,21 @@ public class Game {
                         room = AssignmentSetPositionMenu;
                         break;
                     case 1:
-                        selectedPositionsForAssignment[selectedAssignmentSlot] = 0; // Frente
+                        selectedAssignment.setPosition(selectedAssignmentSlot, 0); // Frente
                         System.out.println("\nPosição definida como Frente.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetPositionMenu;
                         break;
                     case 2:
-                        selectedPositionsForAssignment[selectedAssignmentSlot] = 1; // Meio
+                        selectedAssignment.setPosition(selectedAssignmentSlot, 1); // Meio
                         System.out.println("\nPosição definida como Meio.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetPositionMenu;
                         break;
                     case 3:
-                        selectedPositionsForAssignment[selectedAssignmentSlot] = 2; // Retaguarda
+                        selectedAssignment.setPosition(selectedAssignmentSlot, 2); // Retaguarda
                         System.out.println("\nPosição definida como Retaguarda.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
@@ -507,8 +498,7 @@ public class Game {
                 } else {
                     int slotIndex = option - 1;
 
-                    if (slotIndex >= 0 && slotIndex < selectedHuntersForAssignment.length
-                            && selectedHuntersForAssignment[slotIndex] != -1) {
+                    if (selectedAssignment.hasHunterInSlot(slotIndex)) {
                         selectedAssignmentSlot = slotIndex;
                         room = AssignmentChooseCombatStyleMenu;
                     } else {
@@ -524,28 +514,28 @@ public class Game {
                         room = AssignmentSetCombatStyleMenu;
                         break;
                     case 1:
-                        selectedCombatStyles[selectedAssignmentSlot] = 0; // Corpo a Corpo
+                        selectedAssignment.setCombatStyle(selectedAssignmentSlot, 0); // Corpo a Corpo
                         System.out.println("\nEstilo definido como Corpo a Corpo.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetCombatStyleMenu;
                         break;
                     case 2:
-                        selectedCombatStyles[selectedAssignmentSlot] = 1; // À Distância
+                        selectedAssignment.setCombatStyle(selectedAssignmentSlot, 1); // À Distância
                         System.out.println("\nEstilo definido como À Distância.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetCombatStyleMenu;
                         break;
                     case 3:
-                        selectedCombatStyles[selectedAssignmentSlot] = 2; // Suporte
+                        selectedAssignment.setCombatStyle(selectedAssignmentSlot, 2); // Suporte
                         System.out.println("\nEstilo definido como Suporte.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
                         room = AssignmentSetCombatStyleMenu;
                         break;
                     case 4:
-                        selectedCombatStyles[selectedAssignmentSlot] = 3; // Magia
+                        selectedAssignment.setCombatStyle(selectedAssignmentSlot, 3); // Magia
                         System.out.println("\nEstilo definido como Magia.");
                         trf.sleep(500);
                         selectedAssignmentSlot = -1;
@@ -596,77 +586,6 @@ public class Game {
         academy.addItem(Item.fromTemplate(ItemTemplate.LEATHER_ARMOR));
         academy.addItem(Item.fromTemplate(ItemTemplate.LUCKY_CHARM));
         academy.addItem(Item.fromTemplate(ItemTemplate.BASIC_MEDKIT));
-    }
-
-    private boolean addHunterToSelectedAssignment(int hunterIndex) {
-        for (int i = 0; i < selectedHuntersForAssignment.length; i++) {
-            if (selectedHuntersForAssignment[i] == hunterIndex) {
-                return false; // já está na equipe
-            }
-        }
-
-        for (int i = 0; i < selectedHuntersForAssignment.length; i++) {
-            if (selectedHuntersForAssignment[i] == -1) {
-                selectedHuntersForAssignment[i] = hunterIndex;
-                return true;
-            }
-        }
-
-        return false; // equipe cheia
-    }
-
-    private boolean removeHunterFromSelectedAssignment(int slotIndex) {
-        if (slotIndex >= 0 && slotIndex < selectedHuntersForAssignment.length && selectedHuntersForAssignment[slotIndex] != -1) {
-            selectedHuntersForAssignment[slotIndex] = -1;
-            selectedPositionsForAssignment[slotIndex] = -1;
-            selectedCombatStyles[slotIndex] = -1;
-            return true;
-        }
-        return false;
-    }
-
-    private String getPositionName(int position) {
-        return switch (position) {
-            case 0 -> "Frente";
-            case 1 -> "Meio";
-            case 2 -> "Retaguarda";
-            default -> "Não definida";
-            };
-        }
-
-    private String getCombatStyleName(int style) {
-        return switch (style) {
-            case 0 -> "Corpo a Corpo";
-            case 1 -> "À Distância";
-            case 2 -> "Suporte";
-            case 3 -> "Magia";
-            default -> "Não definido";
-        };
-    }
-
-    private boolean isHunterAlreadySelectedForAssignment(int hunterIndex) {
-        for (int selected : selectedHuntersForAssignment) {
-            if (selected == hunterIndex) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isAssignmentReady() {
-        boolean hasAtLeastOneHunter = false;
-
-        for (int i = 0; i < selectedHuntersForAssignment.length; i++) {
-            if (selectedHuntersForAssignment[i] != -1) {
-                hasAtLeastOneHunter = true;
-
-                if (selectedPositionsForAssignment[i] == -1 || selectedCombatStyles[i] == -1) {
-                    return false;
-                }
-            }
-        }
-
-        return hasAtLeastOneHunter;
     }
 
 // ======================================== MENU DESIGNS ========================================
@@ -765,7 +684,9 @@ public class Game {
                 System.out.println();
             }
         }
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
         System.out.print("\nEscolha uma opção: ");
     }
 
@@ -820,7 +741,9 @@ public class Game {
         System.out.println("1 - Enviar para a Clínica");
         System.out.println("2 - Enviar para o Bar");
         System.out.println("3 - Ver mais detalhes");
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
 
         System.out.print("\nEscolha uma opção: ");
     }
@@ -848,7 +771,9 @@ public class Game {
             }
         }
 
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
         System.out.print("\nEscolha uma opção: ");
     }
 
@@ -875,7 +800,9 @@ public class Game {
             }
         }
 
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
         System.out.print("\nEscolha uma opção: ");
     }
     private void showAssignmentsMenu() {
@@ -895,29 +822,35 @@ public class Game {
             }
         }
 
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
         System.out.print("\nEscolha uma opção: ");
     }
 
     private void showAssignmentPreparationMenu() {
         System.out.println("\n=== PREPARAÇÃO DO CONTRATO ===\n");
 
-        if (selectedAssignment == null) {
+        Assignment assignment = selectedAssignment.getAssignment();
+
+        if (assignment == null) {
             System.out.println("Nenhum contrato selecionado.");
-            System.out.println("\n0 - Voltar");
+            System.out.println("\n------------");
+            System.out.println("0 - Voltar");
+            System.out.println("============");
             System.out.print("\nEscolha uma opção: ");
             return;
         }
 
-        System.out.println("Contrato: " + selectedAssignment.getTitle());
-        System.out.println("Dificuldade: " + selectedAssignment.getDifficulty());
-        System.out.println("Ameaça principal: " + selectedAssignment.getMainThreat().getDisplayName());
-        System.out.println("Descrição: " + selectedAssignment.getDescription());
+        System.out.println("Contrato: " + assignment.getTitle());
+        System.out.println("Dificuldade: " + assignment.getDifficulty());
+        System.out.println("Ameaça principal: " + assignment.getMainThreat().getDisplayName());
+        System.out.println("Descrição: " + assignment.getDescription());
 
         System.out.println("\n--- EQUIPE ENVIADA ---");
 
-        for (int i = 0; i < selectedHuntersForAssignment.length; i++) {
-            int hunterIndex = selectedHuntersForAssignment[i];
+        for (int i = 0; i < 3; i++) {
+            int hunterIndex = selectedAssignment.getHunterAt(i);
 
             if (hunterIndex == -1) {
                 System.out.println((i + 1) + " - [Vazio]");
@@ -926,9 +859,10 @@ public class Game {
             } else {
                 MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
                 System.out.println((i + 1) + " - " + hunter.getName());
-                System.out.println("    Posição: " + getPositionName(selectedPositionsForAssignment[i]));
-                System.out.println("    Estilo: " + getCombatStyleName(selectedCombatStyles[i]));
+                System.out.println("    Posição: " + SelectedAssignment.getPositionName(selectedAssignment.getPositionAt(i)));
+                System.out.println("    Estilo: " + SelectedAssignment.getCombatStyleName(selectedAssignment.getCombatStyleAt(i)));
             }
+
             System.out.println();
         }
 
@@ -938,7 +872,9 @@ public class Game {
         System.out.println("3 - Definir Posições");
         System.out.println("4 - Definir Estilos de Combate");
         System.out.println("5 - Confirmar Envio");
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
 
         System.out.print("\nEscolha uma opção: ");
     }
@@ -947,33 +883,39 @@ public class Game {
         System.out.println("\n=== ADICIONAR CAÇADOR ===\n");
 
         int[] availableIndexes = academy.getAvailableHunterIndexesForAssignment();
+        int visibleOption = 1;
+        boolean hasAny = false;
 
-        if (availableIndexes.length == 0) {
-            System.out.println("Nenhum caçador disponível.");
-        } else {
-            for (int i = 0; i < availableIndexes.length; i++) {
-                int hunterIndex = availableIndexes[i];
+        for (int hunterIndex : availableIndexes) {
+            if (!selectedAssignment.isHunterAlreadySelected(hunterIndex)) {
+                MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
 
-                if (!isHunterAlreadySelectedForAssignment(hunterIndex)) {
-                    MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
-                    System.out.println((i + 1) + " - " + hunter.getName());
-                    System.out.println("    HP: " + hunter.getHP() + "/" + hunter.getMaxHP()
-                            + " | PE: " + hunter.getPE() + "/" + hunter.getMaxPE()
-                            + " | Estresse: " + hunter.getStress() + "/" + hunter.getMaxStress());
-                    System.out.println();
-                }
+                System.out.println(visibleOption + " - " + hunter.getName());
+                System.out.println("    HP: " + hunter.getHP() + "/" + hunter.getMaxHP()
+                        + " | PE: " + hunter.getPE() + "/" + hunter.getMaxPE()
+                        + " | Estresse: " + hunter.getStress() + "/" + hunter.getMaxStress());
+                System.out.println();
+
+                visibleOption++;
+                hasAny = true;
             }
         }
 
+        if (!hasAny) {
+            System.out.println("Nenhum caçador disponível.");
+        }
+
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
         System.out.print("\nEscolha uma opção: ");
     }
 
     private void showAssignmentRemoveHunterMenu() {
         System.out.println("\n=== REMOVER CAÇADOR ===\n");
 
-        for (int i = 0; i < selectedHuntersForAssignment.length; i++) {
-            int hunterIndex = selectedHuntersForAssignment[i];
+        for (int i = 0; i < 3; i++) {
+            int hunterIndex = selectedAssignment.getHunterAt(i);
 
             if (hunterIndex == -1) {
                 System.out.println((i + 1) + " - [Vazio]");
@@ -983,49 +925,63 @@ public class Game {
             }
         }
 
-        System.out.println("\n0 - Voltar");
+        System.out.println("\n------------");
+        System.out.println("0 - Voltar");
+        System.out.println("============");
         System.out.print("\nEscolha uma opção: ");
     }
 
     private void showAssignmentSetPositionMenu() {
         System.out.println("\n=== DEFINIR POSIÇÕES ===\n");
 
-        for (int i = 0; i < selectedHuntersForAssignment.length; i++) {
-            int hunterIndex = selectedHuntersForAssignment[i];
+        for (int i = 0; i < 3; i++) {
+            int hunterIndex = selectedAssignment.getHunterAt(i);
 
             if (hunterIndex == -1) {
                 System.out.println((i + 1) + " - [Vazio]");
             } else {
                 MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
                 System.out.println((i + 1) + " - " + hunter.getName()
-                        + " | Posição atual: " + getPositionName(selectedPositionsForAssignment[i]));
+                        + " | Posição atual: "
+                        + SelectedAssignment.getPositionName(selectedAssignment.getPositionAt(i)));
             }
         }
 
         System.out.println("\nEscolha o slot para alterar.");
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
         System.out.print("\nEscolha uma opção: ");
     }
     
     private void showAssignmentChoosePositionMenu() {
         System.out.println("\n=== ESCOLHER POSIÇÃO ===\n");
 
-        if (selectedAssignmentSlot == -1 || selectedHuntersForAssignment[selectedAssignmentSlot] == -1) {
+        if (selectedAssignmentSlot == -1 || !selectedAssignment.hasHunterInSlot(selectedAssignmentSlot)) {
             System.out.println("Nenhum slot válido selecionado.");
-            System.out.println("\n0 - Voltar");
+            System.out.println("\n------------");
+            System.out.println("0 - Voltar");
+            System.out.println("============");
             System.out.print("\nEscolha uma opção: ");
             return;
         }
 
-        MonsterHunter hunter = academy.getHunterByIndex(selectedHuntersForAssignment[selectedAssignmentSlot]);
+        MonsterHunter hunter = academy.getHunterByIndex(
+                selectedAssignment.getHunterAt(selectedAssignmentSlot)
+        );
 
         System.out.println("Caçador: " + hunter.getName());
-        System.out.println("Posição atual: " + getPositionName(selectedPositionsForAssignment[selectedAssignmentSlot]));
+        System.out.println("Posição atual: "
+                + SelectedAssignment.getPositionName(
+                        selectedAssignment.getPositionAt(selectedAssignmentSlot)
+                ));
 
         System.out.println("\n1 - Frente");
         System.out.println("2 - Meio");
         System.out.println("3 - Retaguarda");
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
+        System.out.println("============");
 
         System.out.print("\nEscolha uma opção: ");
     }
@@ -1033,44 +989,53 @@ public class Game {
     private void showAssignmentSetCombatStyleMenu() {
         System.out.println("\n=== DEFINIR ESTILO DE COMBATE ===\n");
 
-        for (int i = 0; i < selectedHuntersForAssignment.length; i++) {
-            int hunterIndex = selectedHuntersForAssignment[i];
+        for (int i = 0; i < 3; i++) {
+            int hunterIndex = selectedAssignment.getHunterAt(i);
 
             if (hunterIndex == -1) {
                 System.out.println((i + 1) + " - [Vazio]");
             } else {
                 MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
                 System.out.println((i + 1) + " - " + hunter.getName()
-                        + " | Estilo atual: " + getCombatStyleName(selectedCombatStyles[i]));
+                        + " | Estilo atual: "
+                        + SelectedAssignment.getCombatStyleName(selectedAssignment.getCombatStyleAt(i)));
             }
         }
 
-        System.out.println("\nEscolha o slot para alterar.");
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
-        System.out.print("\nEscolha uma opção: ");
+        System.out.println("============");
     }
 
     private void showAssignmentChooseCombatStyleMenu() {
         System.out.println("\n=== ESCOLHER ESTILO DE COMBATE ===\n");
 
-        if (selectedAssignmentSlot == -1 || selectedHuntersForAssignment[selectedAssignmentSlot] == -1) {
+        if (selectedAssignmentSlot == -1 || !selectedAssignment.hasHunterInSlot(selectedAssignmentSlot)) {
             System.out.println("Nenhum slot válido selecionado.");
-            System.out.println("\n0 - Voltar");
+            System.out.println("\n------------");
+            System.out.println("0 - Voltar");
+            System.out.println("============");
             System.out.print("\nEscolha uma opção: ");
             return;
         }
 
-        MonsterHunter hunter = academy.getHunterByIndex(selectedHuntersForAssignment[selectedAssignmentSlot]);
+        MonsterHunter hunter = academy.getHunterByIndex(
+                selectedAssignment.getHunterAt(selectedAssignmentSlot)
+        );
 
         System.out.println("Caçador: " + hunter.getName());
-        System.out.println("Estilo atual: " + getCombatStyleName(selectedCombatStyles[selectedAssignmentSlot]));
+        System.out.println("Estilo atual: "
+                + SelectedAssignment.getCombatStyleName(
+                        selectedAssignment.getCombatStyleAt(selectedAssignmentSlot)
+                ));
 
         System.out.println("\n1 - Corpo a Corpo");
         System.out.println("2 - À Distância");
         System.out.println("3 - Suporte");
         System.out.println("4 - Magia");
+        System.out.println("\n------------");
         System.out.println("0 - Voltar");
-
+        System.out.println("============");
         System.out.print("\nEscolha uma opção: ");
     }
 
@@ -1087,6 +1052,8 @@ public class Game {
             }
         }
         System.out.println("\n------------");
-        System.out.println("\n0 - Voltar");
+        System.out.println("0 - Voltar");
+        System.out.println("============");
+        System.out.println("\nEscolha uma opção: ");
     }
 }
