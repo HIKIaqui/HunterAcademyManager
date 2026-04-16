@@ -1,5 +1,8 @@
 package com.huntermanager.data;
 
+import com.huntermanager.data.enums.Trait;
+import com.huntermanager.data.enums.Trauma;
+
 public class HunterAcademy {
 
     private MonsterHunter[] roster = new MonsterHunter[10];
@@ -276,11 +279,28 @@ public class HunterAcademy {
             MonsterHunter hunter = roster[slot];
 
             if (hunter != null) {
-                int healAmount = 8 + (hunter.getConstitution() * 2);
+                int healAmount;
+                int stressValue;
+                
+                // HP RECOVERY
+                if (hunter.getTraits().contains(Trait.FAST_RECOVERY)) {
+                    healAmount = 8 + (hunter.getConstitution() * 4);
+                } else {
+                    healAmount = 8 + (hunter.getConstitution() * 2);
+                }
                 hunter.heal(healAmount);
 
-                int stressReduction = 1 * (Math.max(0, hunter.getSocial() - 1));
-                hunter.reduceStress(stressReduction);
+                // STRESS REDUCED OR ADDED
+                if (hunter.getTraumas().contains(Trauma.LATROFOBIA)) {
+                    stressValue = (Math.max(1, 3 - hunter.getSocial()));
+                    hunter.addStress(stressValue);
+                } else {
+                    stressValue = (Math.max(0, hunter.getSocial() - 1));
+                    hunter.reduceStress(stressValue);
+                }
+                
+                
+                
 
                 removeHunterFromClinic(getHunterIndex(hunter));
             }

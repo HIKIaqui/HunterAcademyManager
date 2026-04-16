@@ -544,8 +544,20 @@ public class Game {
         }
     }
 
+    public HunterAcademy getAcademy() {
+        return academy;
+    }
+
+    public void setSelectedHunter(MonsterHunter selectedHunter) {
+        this.selectedHunter = selectedHunter;
+    }
+
+    public MonsterHunter getSelectedHunter() {
+        return selectedHunter;
+    }
+
     // +++++++++++++++++ NEW GAME STARTUP +++++++++++++++++
-    private void setupNewGame() {
+    public void setupNewGame() {
         academy = new HunterAcademy();
         academy.setMaxRoster(6);
 
