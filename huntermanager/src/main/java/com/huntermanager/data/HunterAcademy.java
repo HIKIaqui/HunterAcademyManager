@@ -528,7 +528,7 @@ public class HunterAcademy {
         return active;
     }
 
-    public boolean equipItemToHunter(Item item, MonsterHunter hunter) {
+ /*   public boolean equipItemToHunter(Item item, MonsterHunter hunter) {
         if (item == null || hunter == null) return false;
 
         // item precisa existir no inventário da academia
@@ -573,9 +573,9 @@ public class HunterAcademy {
 
         item.setEquippedBy(hunter);
         return true;
-    }
+    }*/
 
-    public boolean unequipItemFromHunter(Item item, MonsterHunter hunter) {
+/*    public boolean unequipItemFromHunter(Item item, MonsterHunter hunter) {
         if (item == null || hunter == null) return false;
 
         switch (item.getType()) {
@@ -604,4 +604,5 @@ public class HunterAcademy {
 
         return true;
     }
+        */
 }

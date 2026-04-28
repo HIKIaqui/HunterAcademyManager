@@ -5,13 +5,15 @@
     -fx-text-fill: white;
     -fx-border-color: #666666;
     -fx-border-width: 1px;
-    -fx-pref-width: 180px;
-    -fx-padding: 8px 12px;
+    -fx-pref-width: 220px;
+    -fx-padding: 8px 16px;
+    
 }
 
 .menu-button:hover {
     -fx-background-color: #2a2a2a;
     -fx-border-color: #aaaaaa;
+    -fx-font-size: 16px;
 }
 
 .menu-button:pressed {

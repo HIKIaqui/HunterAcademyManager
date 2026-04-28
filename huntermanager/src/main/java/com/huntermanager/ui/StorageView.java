@@ -61,14 +61,10 @@ public class StorageView {
         sb.append("======= ARMAZÉM =======\n\n");
 
         for (Item item : academy.getActiveItems()) {
-            String status = item.isEquipped()
-                    ? " [Equipado por " + item.getEquippedBy().getName() + "]"
-                    : " [Livre]";
 
             sb.append(item.getName())
               .append(" - ")
               .append(item.getType())
-              .append(status)
               .append("\n");
         }
 

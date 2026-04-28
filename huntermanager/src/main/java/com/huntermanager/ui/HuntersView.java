@@ -89,8 +89,8 @@ public class HuntersView {
             -fx-text-fill: white;
         """);
 
-        Button sendToClinicButton = new Button("Enviar para Clínica");
-        Button sendToBarButton = new Button("Enviar para Bar");
+        Button sendToClinicButton = new Button("Enviar p/ Clínica");
+        Button sendToBarButton = new Button("Enviar p/ Bar");
         Button openFullDetailsButton = new Button("Ficha Completa");
 
         sendToClinicButton.getStyleClass().add("menu-button");

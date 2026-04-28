@@ -7,13 +7,11 @@ public class Item {
     private String name;
     private String description;
     private ItemType type;
-    private MonsterHunter equippedBy;
 
     public Item(String name, String description, ItemType type) {
         this.name = name;
         this.description = description;
         this.type = type;
-        this.equippedBy = null;
     }
 
 // ========== GETTERS ==========
@@ -28,20 +26,6 @@ public class Item {
 
     public ItemType getType() {
         return type;
-    }
-
-    public MonsterHunter getEquippedBy() {
-        return equippedBy;
-    }
-
-// ========== EQUIP ==========
-
-    public boolean isEquipped() {
-        return equippedBy != null;
-    }
-
-    public void setEquippedBy(MonsterHunter equippedBy) {
-        this.equippedBy = equippedBy;
     }
 
 // ========== TEMPLATE ==========
