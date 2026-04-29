@@ -25,7 +25,6 @@ public class Entity {
         this.mind = mind;
         this.social = social;
         this.luck = luck;
-
         this.baseArmor = 0;
     }
 

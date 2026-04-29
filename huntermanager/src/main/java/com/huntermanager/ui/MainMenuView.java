@@ -18,11 +18,7 @@ public class MainMenuView {
         root.setAlignment(Pos.CENTER);
 
         Label title = new Label("O DIRETOR NOS VALES");
-        title.setStyle("""
-            -fx-font-family: 'Consolas';
-            -fx-font-size: 28px;
-            -fx-text-fill: white;
-            """);
+        title.getStyleClass().add("main-title");
 
         Label subtitle = new Label("""
             ╔════════════════════════════╗
@@ -30,14 +26,22 @@ public class MainMenuView {
             ║  dos Caçadores dos Vales   ║
             ╚════════════════════════════╝
             """);
-        subtitle.setStyle("""
-            -fx-font-family: 'Consolas';
-            -fx-font-size: 14px;
-            -fx-text-fill: #bbbbbb;
-            """);
+        subtitle.getStyleClass().add("main-subtitle");
 
+        Button continueGame = makeMenuButton("Continuar jogo");
         Button newGame = makeMenuButton("Novo jogo");
+        Button loadGame = makeMenuButton("Carregar jogo");
         Button exit = makeMenuButton("Sair");
+
+        continueGame.setOnAction(e -> {
+            try {
+                System.out.println("Cliquei em Continuar jogo");
+                navigator.showAcademyView();
+                System.out.println("Tela da academia chamada");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         newGame.setOnAction(e -> {
             try {
@@ -51,10 +55,20 @@ public class MainMenuView {
             }
         });
 
+        loadGame.setOnAction(e -> {
+            try {
+                System.out.println("Cliquei em Carregar jogo");
+                navigator.showAcademyView();
+                System.out.println("Tela da academia chamada");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         exit.setOnAction(e -> root.getScene().getWindow().hide());
 
         root.setStyle("-fx-background-color: #111111;");
-        root.getChildren().addAll(title, subtitle, newGame, exit);
+        root.getChildren().addAll(title, subtitle, continueGame, newGame, loadGame, exit);
     }
 
     private Button makeMenuButton(String text) {

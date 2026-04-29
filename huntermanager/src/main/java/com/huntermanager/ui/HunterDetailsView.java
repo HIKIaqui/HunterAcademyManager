@@ -60,11 +60,7 @@ public class HunterDetailsView {
 
         leftMenu.getChildren().addAll(clinicButton, barButton, backButton);
 
-        contentLabel.setStyle("""
-            -fx-font-family: 'Consolas';
-            -fx-font-size: 15px;
-            -fx-text-fill: #dddddd;
-        """);
+        contentLabel.getStyleClass().add("details-small");
 
         VBox centerBox = new VBox(10, contentLabel);
         centerBox.setPadding(new Insets(10));

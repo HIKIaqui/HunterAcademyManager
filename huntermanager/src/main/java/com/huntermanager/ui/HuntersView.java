@@ -58,21 +58,13 @@ public class HuntersView {
 
         VBox listWrapper = new VBox(10);
         Label listTitle = new Label("=== CAÇADORES ===");
-        listTitle.setStyle("""
-            -fx-font-family: 'Consolas';
-            -fx-font-size: 16px;
-            -fx-text-fill: white;
-        """);
+        listTitle.getStyleClass().add("default");
 
         listWrapper.getChildren().addAll(listTitle, hunterListBox);
         VBox.setVgrow(hunterListBox, Priority.ALWAYS);
 
         // PAINEL DE DETALHES
-        detailsLabel.setStyle("""
-            -fx-font-family: 'Consolas';
-            -fx-font-size: 15px;
-            -fx-text-fill: #dddddd;
-        """);
+        detailsLabel.getStyleClass().add("details-small");
 
         VBox detailPanel = new VBox(10);
         detailPanel.setPadding(new Insets(10));
@@ -83,19 +75,15 @@ public class HuntersView {
         """);
 
         Label detailTitle = new Label("=== DETALHES ===");
-        detailTitle.setStyle("""
-            -fx-font-family: 'Consolas';
-            -fx-font-size: 16px;
-            -fx-text-fill: white;
-        """);
+        detailTitle.getStyleClass().add("details");
 
         Button sendToClinicButton = new Button("Enviar p/ Clínica");
         Button sendToBarButton = new Button("Enviar p/ Bar");
         Button openFullDetailsButton = new Button("Ficha Completa");
 
-        sendToClinicButton.getStyleClass().add("menu-button");
-        sendToBarButton.getStyleClass().add("menu-button");
-        openFullDetailsButton.getStyleClass().add("menu-button");
+        sendToClinicButton.getStyleClass().add("menu-button-small");
+        sendToBarButton.getStyleClass().add("menu-button-small");
+        openFullDetailsButton.getStyleClass().add("menu-button-small");
 
         sendToClinicButton.setOnAction(e -> {
             if (selectedHunter != null) {
@@ -155,10 +143,7 @@ public class HuntersView {
 
         if (academy == null) {
             Label errorLabel = new Label("Academia não inicializada.");
-            errorLabel.setStyle("""
-                -fx-font-family: 'Consolas';
-                -fx-text-fill: #dddddd;
-            """);
+            errorLabel.getStyleClass().add("default");
             hunterListBox.getChildren().add(errorLabel);
             return;
         }
@@ -167,10 +152,7 @@ public class HuntersView {
 
         if (hunters.length == 0) {
             Label emptyLabel = new Label("Nenhum caçador disponível.");
-            emptyLabel.setStyle("""
-                -fx-font-family: 'Consolas';
-                -fx-text-fill: #dddddd;
-            """);
+            emptyLabel.getStyleClass().add("default");
             hunterListBox.getChildren().add(emptyLabel);
             return;
         }

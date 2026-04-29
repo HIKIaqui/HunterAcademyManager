@@ -33,12 +33,15 @@ public class MonsterHunterTemplates {
         int[] attributes = generateAttributes();
         String name = HunterNames.generateName();
         MonsterHunter hunter = new MonsterHunter(name, attributes[0], attributes[1],attributes[2], attributes[3], attributes[4]);
-        
+
         Trait[] values = Trait.values();
         hunter.addTrait(values[random.nextInt(values.length)]);
         
         Trauma[] values2 = Trauma.values();
         hunter.addTrauma(values2[random.nextInt(values2.length)]);
+
+        Origin[] values3 = Origin.values();
+        hunter.addOrigin(values3[random.nextInt(values3.length)]);
         
         return hunter;
 

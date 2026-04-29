@@ -69,11 +69,7 @@ public class AcademyView {
         VBox centerBox = new VBox(15, infoLabel);
         centerBox.setPadding(new Insets(10));
 
-        infoLabel.setStyle("""
-            -fx-font-family: 'Consolas';
-            -fx-font-size: 16px;
-            -fx-text-fill: #cccccc;
-            """);
+        infoLabel.getStyleClass().add("default");
 
         root.setTop(academyHeader);
         root.setLeft(leftMenu);

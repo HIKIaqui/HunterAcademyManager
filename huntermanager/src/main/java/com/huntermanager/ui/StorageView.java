@@ -35,11 +35,7 @@ public class StorageView {
         VBox leftMenu = new VBox(10, backButton);
         leftMenu.setPadding(new Insets(10));
 
-        contentLabel.setStyle("""
-            -fx-font-family: 'Consolas';
-            -fx-font-size: 15px;
-            -fx-text-fill: #dddddd;
-        """);
+        contentLabel.getStyleClass().add("details-big");
 
         VBox centerBox = new VBox(10, contentLabel);
         centerBox.setPadding(new Insets(10));

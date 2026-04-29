@@ -161,7 +161,7 @@ public class MonsterHunter extends Entity {
         return origins.contains(origin);
     }
 
-    public boolean addTrait(Origin origin) {
+    public boolean addOrigin(Origin origin) {
         if (origin != null && !origins.contains(origin)) {
             origins.add(origin);
             return true;
@@ -169,7 +169,7 @@ public class MonsterHunter extends Entity {
         return false;
     }
 
-    public boolean removeTrait(Origin origin) {
+    public boolean removeOrigin(Origin origin) {
         return origins.remove(origin);
     }
 
