@@ -34,13 +34,16 @@ public class HunterDetailsView {
         VBox leftMenu = new VBox(10);
         leftMenu.setPadding(new Insets(10));
 
+        Button backButton = new Button("Voltar");
+        Button findButton = new Button("Encontrar");
         Button clinicButton = new Button("Enviar para Clínica");
         Button barButton = new Button("Enviar para Bar");
-        Button backButton = new Button("Voltar");
-
-        clinicButton.getStyleClass().add("menu-button");
-        barButton.getStyleClass().add("menu-button");
-        backButton.getStyleClass().add("menu-button");
+        
+        backButton.getStyleClass().add("menu-button-long");
+        clinicButton.getStyleClass().add("menu-button-long");
+        findButton.getStyleClass().add("menu-button-long");
+        barButton.getStyleClass().add("menu-button-long");
+        
 
         if (academy != null && selectedHunter != null) {
             int selectedHunterIndex = academy.getHunterIndex(selectedHunter);
@@ -54,13 +57,19 @@ public class HunterDetailsView {
                 academy.addHunterToBar(selectedHunterIndex);
                 navigator.showHunterDetailsView();
             });
+
+            findButton.setOnAction(e -> {
+                if (academy.isHunterInBar(academy.getHunterIndex(selectedHunter))) {navigator.showBarView();} 
+                else if (academy.isHunterInClinic(academy.getHunterIndex(selectedHunter))) {navigator.showClinicView();}
+                else {navigator.showHunterDetailsView();}
+            });
         }
 
         backButton.setOnAction(e -> navigator.showHuntersView());
 
-        leftMenu.getChildren().addAll(clinicButton, barButton, backButton);
+        leftMenu.getChildren().addAll(backButton, findButton, clinicButton, barButton);
 
-        contentLabel.getStyleClass().add("details-small");
+        contentLabel.getStyleClass().add("details-big");
 
         VBox centerBox = new VBox(10, contentLabel);
         centerBox.setPadding(new Insets(10));

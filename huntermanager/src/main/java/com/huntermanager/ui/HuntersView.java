@@ -49,33 +49,25 @@ public class HuntersView {
         root.setLeft(leftMenu);
 
         // LISTA DE CAÇADORES
-        hunterListBox.setPadding(new Insets(10));
-        hunterListBox.setStyle("""
-            -fx-background-color: #151515;
-            -fx-border-color: #444444;
-            -fx-border-width: 1px;
-        """);
 
         VBox listWrapper = new VBox(10);
         Label listTitle = new Label("=== CAÇADORES ===");
-        listTitle.getStyleClass().add("default");
+        listTitle.getStyleClass().add("details-big");
 
         listWrapper.getChildren().addAll(listTitle, hunterListBox);
         VBox.setVgrow(hunterListBox, Priority.ALWAYS);
+        listWrapper.setPadding(new Insets(10));
+        listWrapper.getStyleClass().add("box-background-default");
 
         // PAINEL DE DETALHES
         detailsLabel.getStyleClass().add("details-small");
 
         VBox detailPanel = new VBox(10);
         detailPanel.setPadding(new Insets(10));
-        detailPanel.setStyle("""
-            -fx-background-color: #151515;
-            -fx-border-color: #444444;
-            -fx-border-width: 1px;
-        """);
+        detailPanel.getStyleClass().add("box-background-default");
 
         Label detailTitle = new Label("=== DETALHES ===");
-        detailTitle.getStyleClass().add("details");
+        detailTitle.getStyleClass().add("details-big");
 
         Button sendToClinicButton = new Button("Enviar p/ Clínica");
         Button sendToBarButton = new Button("Enviar p/ Bar");

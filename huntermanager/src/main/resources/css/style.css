@@ -24,6 +24,32 @@
     -fx-background-color: #444444;
 }
 
+.menu-button-long {
+    font-family: 'Consolas';
+    font-size: 17px;
+
+    -fx-font-family: "Consolas";
+    -fx-font-size: 17px;
+    -fx-background-color: #1d1d1d;
+    -fx-text-fill: white;
+    -fx-border-color: #666666;
+    -fx-border-width: 1px;
+    -fx-pref-width: 260px;
+    -fx-pref-height: 60px;
+    -fx-padding: 8px 16px;
+    
+}
+
+.menu-button-long:hover {
+    -fx-background-color: #2a2a2a;
+    -fx-border-color: #aaaaaa;
+    -fx-font-size: 18px;
+}
+
+.menu-button-long:pressed {
+    -fx-background-color: #444444;
+}
+
 .menu-button-small {
     font-family: 'Consolas';
     font-size: 15px;
@@ -109,6 +135,16 @@
     -fx-font-size: 15px;
     -fx-font-family: 'Consolas';
     -fx-text-fill: white;
+}
+
+.box-background-default {
+    background-color: #151515;
+    border-color: #444444;
+    border-width: 1px;
+
+    -fx-background-color: #151515;
+    -fx-border-color: #444444;
+    -fx-border-width: 1px;
 }
 
 .main-title {
