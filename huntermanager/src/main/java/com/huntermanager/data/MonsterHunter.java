@@ -11,21 +11,16 @@ import com.huntermanager.data.enums.Stats;
 import com.huntermanager.data.enums.Trait;
 import com.huntermanager.data.enums.Trauma;
 import com.huntermanager.data.itemTypes.itemData.Equippable;
-import com.huntermanager.data.itemTypes.itemData.StatsModifier;
 
 
 
 public class MonsterHunter extends Entity {
     private final int maxStress = 10;
     private final Map<EquipmentSlot, Equippable> equipment = new HashMap<>();
-    private final List<StatsModifier> modifiers = new ArrayList<>();
 
 
 
     private int stress;
-    private Item equippedWeapon;
-    private Item equippedArmor;
-    private Item equippedAccessory;
 
     private List<Trauma> traumas;
     private List<Trait> traits;
@@ -71,30 +66,20 @@ public class MonsterHunter extends Entity {
         return origins;
     }
 
-    public Item getEquippedWeapon() {
-        return equippedWeapon;
+    public Equippable getEquipment(EquipmentSlot slot) {
+        return equipment.get(slot);
     }
 
-    public Item getEquippedArmor() {
-        return equippedArmor;
+    public Equippable getEquippedWeapon() {
+        return equipment.get(EquipmentSlot.WEAPON);
     }
 
-    public Item getEquippedAccessory() {
-        return equippedAccessory;
+    public Equippable getEquippedSuit() {
+        return equipment.get(EquipmentSlot.SUIT);
     }
 
-// ========== SETTERS ==========
-
-    public void setEquippedWeapon(Item item) {
-        this.equippedWeapon = item;
-    }
-
-    public void setEquippedArmor(Item item) {
-        this.equippedArmor = item;
-    }
-
-    public void setEquippedAccessory(Item item) {
-        this.equippedAccessory = item;
+    public Equippable getEquippedAccessory() {
+        return equipment.get(EquipmentSlot.ACCESSORY);
     }
 
 // ========== STRESS ==========
@@ -173,9 +158,11 @@ public class MonsterHunter extends Entity {
         return origins.remove(origin);
     }
 
-// ========== STATS MODIFIERS ==========
+// ========== ITENS ==========
 
     public void equip(Equippable item) {
+        if (item == null) return;
+
         EquipmentSlot slot = item.getSlot();
 
         if (equipment.containsKey(slot)) {
@@ -195,32 +182,12 @@ public class MonsterHunter extends Entity {
         }
     }
 
-    public void addModifier(StatsModifier modifier) {
-        modifiers.add(modifier);
-    }
-
-    public void removeModifier(StatsModifier modifier) {
-        modifiers.remove(modifier);
-    }
-
-    public int getStatBonus(Stats stats) {
-        int total = 0;
-
-        for (StatsModifier modifier : modifiers) {
-            if (modifier.getStat() == stats) {
-                total += modifier.getAmount();
-            }
-        }
-
-        return total;
-    }
-
 
 // ========== RECALCULATE STATUS ==========
 
     public void recalculateStats() {
-        setMaxHP(15 + (getConstitution() * 10));
-        setMaxPE(4 + (getMind() * 3) + getConstitution());
+        setMaxHP(15 + (getConstitution() * 10) + getStatBonus(Stats.MAX_HP));
+        setMaxPE(4 + (getMind() * 3) + getConstitution() + getStatBonus(Stats.MAX_PE));
 
         if (getHP() > getMaxHP()) {
             setHP(getMaxHP());
@@ -229,5 +196,10 @@ public class MonsterHunter extends Entity {
         if (getPE() > getMaxPE()) {
             setPE(getMaxPE());
         }
+    }
+
+    @Override
+    protected void onStatsChanged() {
+        recalculateStats();
     }
 }

@@ -69,7 +69,7 @@ public class AcademyView {
         VBox centerBox = new VBox(15, infoLabel);
         centerBox.setPadding(new Insets(10));
 
-        infoLabel.getStyleClass().add("default");
+        infoLabel.getStyleClass().add("default-big");
 
         root.setTop(academyHeader);
         root.setLeft(leftMenu);

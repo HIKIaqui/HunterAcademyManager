@@ -7,12 +7,10 @@ import com.huntermanager.data.MonsterHunter;
 import com.huntermanager.data.SelectedAssignment;
 import com.huntermanager.data.enums.ItemTemplate;
 import com.huntermanager.data.enums.MonsterHunterTemplates;
-import com.huntermanager.data.functions.TextRenderFunctions;
 
 public class Game {
     private Scanner scanner = new Scanner(System.in);
     int option;
-    TextRenderFunctions trf = new TextRenderFunctions();
 
     private HunterAcademy academy;
     private MonsterHunter selectedHunter;

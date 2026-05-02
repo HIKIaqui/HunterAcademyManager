@@ -9,17 +9,17 @@ import com.huntermanager.data.enums.ItemType;
 import com.huntermanager.data.itemTypes.itemData.Equippable;
 import com.huntermanager.data.itemTypes.itemData.StatsModifier;
 
-public class Armor extends Item implements Equippable {
+public class Suit extends Item implements Equippable {
     private final List<StatsModifier> modifiers;
 
-    public Armor(String name, String description, List<StatsModifier> modifiers) {
-        super(name, description, ItemType.ARMOR);
+    public Suit(String name, String description, List<StatsModifier> modifiers) {
+        super(name, description, ItemType.SUIT);
         this.modifiers = modifiers;
     }
 
     @Override
     public EquipmentSlot getSlot() {
-        return EquipmentSlot.ARMOR;
+        return EquipmentSlot.SUIT;
     }
 
     @Override

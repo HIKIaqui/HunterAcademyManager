@@ -4,14 +4,13 @@ import java.util.List;
 
 import com.huntermanager.data.Item;
 import com.huntermanager.data.itemTypes.Accessory;
-import com.huntermanager.data.itemTypes.Armor;
 import com.huntermanager.data.itemTypes.Consumable;
+import com.huntermanager.data.itemTypes.Suit;
 import com.huntermanager.data.itemTypes.Weapon;
 import com.huntermanager.data.itemTypes.itemData.StatsModifier;
 
 public enum ItemTemplate {
 
-    // ===== ARMAS =====
     RUSTY_SWORD(
         "Espada Enferrujada",
         "Uma espada velha, mas ainda corta.",
@@ -27,10 +26,10 @@ public enum ItemTemplate {
     HEAVY_ARMOR(
         "Armadura Pesada",
         "Protege bem, mas te transforma numa geladeira com depressão.",
-        ItemType.ARMOR,
-        EquipmentSlot.ARMOR,
+        ItemType.SUIT,
+        EquipmentSlot.SUIT,
         List.of(
-            new StatsModifier(Stats.PROTECTION, 6),
+            new StatsModifier(Stats.ARMOR, 6),
             new StatsModifier(Stats.DODGE, -2),
             new StatsModifier(Stats.SPEED, -1)
         ),
@@ -73,7 +72,7 @@ public enum ItemTemplate {
         return switch (type) {
             case ACCESSORY -> new Accessory(name, description, modifiers);
             case WEAPON -> new Weapon(name, description, modifiers);
-            case ARMOR -> new Armor(name, description, modifiers);
+            case SUIT -> new Suit(name, description, modifiers);
             case CONSUMABLE -> new Consumable(name, description, healingAmount);
         };
     }

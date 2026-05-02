@@ -2,10 +2,17 @@ package com.huntermanager.data.enums;
 
 public enum Stats {
     DAMAGE,
-    PROTECTION,
+    ARMOR,
     DODGE,
     SPEED,
     CRIT_CHANCE,
     MAX_HP,
-    STRESS_RESISTANCE
+    MAX_PE,
+
+// Esses são bônus extra de Atributos.
+    CONSTITUTION,
+    AGILITY,
+    MIND,
+    SOCIAL,
+    LUCK
 }

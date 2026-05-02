@@ -1,5 +1,11 @@
 package com.huntermanager.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.huntermanager.data.enums.Stats;
+import com.huntermanager.data.itemTypes.itemData.StatsModifier;
+
 public class Entity {
     private String name;
     private int constitution;
@@ -7,6 +13,7 @@ public class Entity {
     private int mind;
     private int social;
     private int luck;
+    private final List<StatsModifier> modifiers = new ArrayList<>();
 
     private int maxPE;
     private int PE;
@@ -43,27 +50,27 @@ public class Entity {
     }
 
     public int getArmor() {
-        return baseArmor;
+        return Math.max(0, baseArmor + getStatBonus(Stats.ARMOR));
     }
 
     public int getConstitution() {
-        return constitution;
+        return Math.max(0, constitution + getStatBonus(Stats.CONSTITUTION));
     }
 
     public int getAgility() {
-        return agility;
+        return Math.max(0, agility + getStatBonus(Stats.AGILITY));
     }
 
     public int getMind() {
-        return mind;
+        return Math.max(0, mind + getStatBonus(Stats.MIND));
     }
 
     public int getSocial() {
-        return social;
+        return Math.max(0, social + getStatBonus(Stats.SOCIAL));
     }
 
     public int getLuck() {
-        return luck;
+        return Math.max(0, luck + getStatBonus(Stats.LUCK));
     }
 
     public int getMaxPE() {
@@ -79,7 +86,7 @@ public class Entity {
     }
 
     public int getDodge() {
-        return 5 + (agility * 5);
+        return Math.max(0, 5 + (getAgility() * 5) + getStatBonus(Stats.DODGE));
     }
     
 
@@ -175,6 +182,44 @@ public class Entity {
 
     public boolean isExhausted() {
         return PE <= 0;
+    }
+
+    // ========== STATS MODIFIERS ==========
+
+    protected void onStatsChanged() {
+        if (getHP() > getMaxHP()) {
+            setHP(getMaxHP());
+        }
+
+        if (getPE() > getMaxPE()) {
+            setPE(getMaxPE());
+        }
+    }
+
+    public int getStatBonus(Stats stats) {
+        int total = 0;
+
+        for (StatsModifier modifier : modifiers) {
+            if (modifier.getStat() == stats) {
+                total += modifier.getAmount();
+            }
+        }
+
+        return total;
+    }
+
+    public void addModifier(StatsModifier modifier) {
+        if (modifier != null) {
+            modifiers.add(modifier);
+            onStatsChanged();
+        }
+    }
+
+    public void removeModifier(StatsModifier modifier) {
+        if (modifier != null) {
+            modifiers.remove(modifier);
+            onStatsChanged();
+        }
     }
 
 }

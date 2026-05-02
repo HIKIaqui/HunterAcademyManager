@@ -1,6 +1,10 @@
 .menu-button {
     font-family: 'Consolas';
     font-size: 17px;
+    background-color: #1d1d1d;
+    border-color: #666666;
+    border-width: 1px;
+    padding: 8px 16px;
 
     -fx-font-family: "Consolas";
     -fx-font-size: 17px;
@@ -15,18 +19,27 @@
 }
 
 .menu-button:hover {
+    background-color: #2a2a2a;
+    border-color: #aaaaaa;
+    font-size: 18px;
+
     -fx-background-color: #2a2a2a;
     -fx-border-color: #aaaaaa;
     -fx-font-size: 18px;
 }
 
 .menu-button:pressed {
+    background-color: #444444;
     -fx-background-color: #444444;
 }
 
 .menu-button-long {
     font-family: 'Consolas';
     font-size: 17px;
+    background-color: #1d1d1d;
+    border-color: #666666;
+    border-width: 1px;
+    padding: 8px 16px;
 
     -fx-font-family: "Consolas";
     -fx-font-size: 17px;
@@ -41,18 +54,27 @@
 }
 
 .menu-button-long:hover {
+    background-color: #2a2a2a;
+    border-color: #aaaaaa;
+    font-size: 18px;
+
     -fx-background-color: #2a2a2a;
     -fx-border-color: #aaaaaa;
     -fx-font-size: 18px;
 }
 
 .menu-button-long:pressed {
+    background-color: #444444;
     -fx-background-color: #444444;
 }
 
 .menu-button-small {
     font-family: 'Consolas';
     font-size: 15px;
+    background-color: #1d1d1d;
+    border-color: #666666;
+    border-width: 1px;
+    padding: 8px 16px;
 
     -fx-font-family: "Consolas";
     -fx-font-size: 15px;
@@ -67,12 +89,16 @@
 }
 
 .menu-button-small:hover {
+    background-color: #2a2a2a;
+    border-color: #aaaaaa;
+    font-size: 16px;
     -fx-background-color: #2a2a2a;
     -fx-border-color: #aaaaaa;
     -fx-font-size: 16px;
 }
 
 .menu-button-small:pressed {
+    background-color: #444444;
     -fx-background-color: #444444;
 }
 
@@ -81,15 +107,25 @@
     font-size: 17px;
 
     -fx-font-family: 'Consolas';
-    -fx-font-size: 16px;
+    -fx-font-size: 17px;
     -fx-text-fill: white;
 }
-.default-small {
+
+.default-big {
     font-family: 'Consolas';
-    font-size: 16px;
+    font-size: 19px;
 
     -fx-font-family: 'Consolas';
-    -fx-font-size: 16px;
+    -fx-font-size: 19px;
+    -fx-text-fill: white;
+}
+
+.default-small {
+    font-family: 'Consolas';
+    font-size: 15px;
+
+    -fx-font-family: 'Consolas';
+    -fx-font-size: 15px;
     -fx-text-fill: white;
 }
 
