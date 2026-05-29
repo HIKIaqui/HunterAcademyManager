@@ -2,35 +2,24 @@ package com.huntermanager.ui;
 
 import com.huntermanager.Game;
 import com.huntermanager.data.HunterAcademy;
-import com.huntermanager.ui.components.AcademyHeader;
+import com.huntermanager.ui.components.AcademyScreenTemplate;
 
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class AcademyView {
-
-    private final BorderPane root = new BorderPane();
+    
+    private final AcademyScreenTemplate root;
 
     private final Label infoLabel = new Label();
     private final HunterAcademy academy;
-    private final AcademyHeader academyHeader;
     
-    
-
     public AcademyView(AppNavigator navigator, Game game) {
-        
         this.academy = game.getAcademy();
-        this.academyHeader = new AcademyHeader(game);
-        VBox.setVgrow(academyHeader, Priority.NEVER);
-        academyHeader.setMaxWidth(Double.MAX_VALUE);
-
-        root.setPadding(new Insets(20));
-        root.setStyle("-fx-background-color: #101010;");
 
         VBox leftMenu = new VBox(10);
         leftMenu.setPadding(new Insets(10));
@@ -44,8 +33,10 @@ public class AcademyView {
         Button backButton = makeButton("Voltar ao menu");
 
         advanceTimeButton.setOnAction(e -> {
-            academy.advanceDayTime();
-            academyHeader.refresh();
+            if (academy != null) {
+                academy.advanceDayTime();
+            }
+
             refresh();
         });
 
@@ -66,14 +57,16 @@ public class AcademyView {
             backButton
         );
 
+        infoLabel.getStyleClass().add("default-big");
+
         VBox centerBox = new VBox(15, infoLabel);
         centerBox.setPadding(new Insets(10));
 
-        infoLabel.getStyleClass().add("default-big");
+        BorderPane content = new BorderPane();
+        content.setLeft(leftMenu);
+        content.setCenter(centerBox);
 
-        root.setTop(academyHeader);
-        root.setLeft(leftMenu);
-        root.setCenter(centerBox);
+        this.root = new AcademyScreenTemplate(game, content);
 
         refresh();
     }
@@ -81,12 +74,15 @@ public class AcademyView {
     private void refresh() {
         if (academy == null) {
             infoLabel.setText("Academia não inicializada.");
+            root.refresh();
             return;
         }
 
         infoLabel.setText("""
             ║ Isso aqui existe!
             """);
+
+        root.refresh();
     }
 
     private Button makeButton(String text) {

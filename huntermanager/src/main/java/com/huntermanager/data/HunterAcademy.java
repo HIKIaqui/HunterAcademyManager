@@ -1,7 +1,13 @@
 package com.huntermanager.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.huntermanager.data.enums.AcademyFeedType;
 import com.huntermanager.data.enums.Trait;
 import com.huntermanager.data.enums.Trauma;
+import com.huntermanager.data.feed.AcademyFeedEntry;
+import com.huntermanager.data.feed.AcademyFeedGenerator;
 
 public class HunterAcademy {
 
@@ -15,6 +21,11 @@ public class HunterAcademy {
 
     private Item[] inventory = new Item[24];
 
+    // FEED
+    private List<AcademyFeedEntry> feedEntries = new ArrayList<>();
+    private static final int MAX_FEED_ENTRIES = 60;
+
+    // CONSTANTS
     public static final int MORNING = 0;
     public static final int AFTERNOON = 1;
     public static final int NIGHT = 2;
@@ -114,6 +125,10 @@ public class HunterAcademy {
         return barSlots;
     }
 
+    public List<AcademyFeedEntry> getFeedEntries() {
+        return feedEntries;
+    }
+
 // ========== SETTERS ==========
 
     public void setRoster(MonsterHunter[] roster) {
@@ -142,6 +157,18 @@ public class HunterAcademy {
 
     public void setBarSlots(int[] barSlots) {
         this.barSlots = barSlots;
+    }
+
+    public void addFeedEntry(String text, AcademyFeedType type) {
+        if (text == null || text.isBlank()) {
+            return;
+        }
+
+        feedEntries.add(new AcademyFeedEntry(currentDay, currentDayTime, type, text));
+
+        while (feedEntries.size() > MAX_FEED_ENTRIES) {
+            feedEntries.remove(0);
+        }
     }
 
 // ========== FUNCTIONS ==========
@@ -179,6 +206,9 @@ public class HunterAcademy {
     public void advanceDayTime() {
         barCycleLogic();
         clinicCycleLogic();
+
+        AcademyFeedGenerator.generateTimePassageFeed(this);
+
         if (currentDayTime < NIGHT) {
             currentDayTime++;
         } else {
@@ -527,82 +557,4 @@ public class HunterAcademy {
 
         return active;
     }
-
- /*   public boolean equipItemToHunter(Item item, MonsterHunter hunter) {
-        if (item == null || hunter == null) return false;
-
-        // item precisa existir no inventário da academia
-        boolean itemExists = false;
-        for (Item inventoryItem : inventory) {
-            if (inventoryItem == item) {
-                itemExists = true;
-                break;
-            }
-        }
-
-        if (!itemExists) return false;
-
-        // se já estiver equipado em alguém, remove de lá primeiro
-        if (item.isEquipped()) {
-            MonsterHunter previousHunter = item.getEquippedBy();
-            unequipItemFromHunter(item, previousHunter);
-        }
-
-        switch (item.getType()) {
-            case WEAPON:
-                if (hunter.getEquippedWeapon() != null) {
-                    hunter.getEquippedWeapon().setEquippedBy(null);
-                }
-                hunter.setEquippedWeapon(item);
-                break;
-            case ARMOR:
-                if (hunter.getEquippedArmor() != null) {
-                    hunter.getEquippedArmor().setEquippedBy(null);
-                }
-                hunter.setEquippedArmor(item);
-                break;
-            case ACCESSORY:
-                if (hunter.getEquippedAccessory() != null) {
-                    hunter.getEquippedAccessory().setEquippedBy(null);
-                }
-                hunter.setEquippedAccessory(item);
-                break;
-            default:
-                return false;
-        }
-
-        item.setEquippedBy(hunter);
-        return true;
-    }*/
-
-/*    public boolean unequipItemFromHunter(Item item, MonsterHunter hunter) {
-        if (item == null || hunter == null) return false;
-
-        switch (item.getType()) {
-            case WEAPON:
-                if (hunter.getEquippedWeapon() == item) {
-                    hunter.setEquippedWeapon(null);
-                }
-                break;
-            case ARMOR:
-                if (hunter.getEquippedArmor() == item) {
-                    hunter.setEquippedArmor(null);
-                }
-                break;
-            case ACCESSORY:
-                if (hunter.getEquippedAccessory() == item) {
-                    hunter.setEquippedAccessory(null);
-                }
-                break;
-            default:
-                return false;
-        }
-
-        if (item.getEquippedBy() == hunter) {
-            item.setEquippedBy(null);
-        }
-
-        return true;
-    }
-        */
 }

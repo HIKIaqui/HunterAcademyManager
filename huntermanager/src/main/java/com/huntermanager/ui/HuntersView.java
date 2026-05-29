@@ -6,6 +6,7 @@ import com.huntermanager.data.Item;
 import com.huntermanager.data.MonsterHunter;
 import com.huntermanager.data.enums.EquipmentSlot;
 import com.huntermanager.data.itemTypes.itemData.Equippable;
+import com.huntermanager.ui.components.AcademyFeed;
 import com.huntermanager.ui.components.AcademyHeader;
 
 import javafx.geometry.Insets;
@@ -34,9 +35,14 @@ public class HuntersView {
 
     public HuntersView(AppNavigator navigator, Game game) {
         this.academy = game.getAcademy();
+        
         this.header = new AcademyHeader(game);
         VBox.setVgrow(header, Priority.NEVER);
         header.setMaxWidth(Double.MAX_VALUE);
+
+        AcademyFeed feed = new AcademyFeed(game);
+        VBox.setVgrow(feed, Priority.NEVER);
+        feed.setMaxWidth(Double.MAX_VALUE);
 
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #101010;");

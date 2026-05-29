@@ -5,7 +5,7 @@ import com.huntermanager.data.HunterAcademy;
 import com.huntermanager.data.MonsterHunter;
 import com.huntermanager.data.enums.Trait;
 import com.huntermanager.data.enums.Trauma;
-import com.huntermanager.ui.components.AcademyHeader;
+import com.huntermanager.ui.components.AcademyScreenTemplate;
 
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -17,19 +17,12 @@ import javafx.scene.layout.VBox;
 
 public class HunterDetailsView {
 
-    private final BorderPane root = new BorderPane();
+    private final AcademyScreenTemplate root;
     private final Label contentLabel = new Label();
 
     public HunterDetailsView(AppNavigator navigator, Game game) {
         HunterAcademy academy = game.getAcademy();
         MonsterHunter selectedHunter = game.getSelectedHunter();
-
-        root.setPadding(new Insets(20));
-        root.setStyle("-fx-background-color: #101010;");
-
-        AcademyHeader header = new AcademyHeader(game);
-        VBox.setVgrow(header, Priority.NEVER);
-        header.setMaxWidth(Double.MAX_VALUE);
 
         VBox leftMenu = new VBox(10);
         leftMenu.setPadding(new Insets(10));
@@ -38,12 +31,11 @@ public class HunterDetailsView {
         Button findButton = new Button("Encontrar");
         Button clinicButton = new Button("Enviar para Clínica");
         Button barButton = new Button("Enviar para Bar");
-        
+
         backButton.getStyleClass().add("menu-button-long");
         clinicButton.getStyleClass().add("menu-button-long");
         findButton.getStyleClass().add("menu-button-long");
         barButton.getStyleClass().add("menu-button-long");
-        
 
         if (academy != null && selectedHunter != null) {
             int selectedHunterIndex = academy.getHunterIndex(selectedHunter);
@@ -59,9 +51,13 @@ public class HunterDetailsView {
             });
 
             findButton.setOnAction(e -> {
-                if (academy.isHunterInBar(academy.getHunterIndex(selectedHunter))) {navigator.showBarView();} 
-                else if (academy.isHunterInClinic(academy.getHunterIndex(selectedHunter))) {navigator.showClinicView();}
-                else {navigator.showHunterDetailsView();}
+                if (academy.isHunterInBar(selectedHunterIndex)) {
+                    navigator.showBarView();
+                } else if (academy.isHunterInClinic(selectedHunterIndex)) {
+                    navigator.showClinicView();
+                } else {
+                    navigator.showHunterDetailsView();
+                }
             });
         }
 
@@ -70,13 +66,17 @@ public class HunterDetailsView {
         leftMenu.getChildren().addAll(backButton, findButton, clinicButton, barButton);
 
         contentLabel.getStyleClass().add("details-big");
+        contentLabel.setWrapText(true);
 
         VBox centerBox = new VBox(10, contentLabel);
         centerBox.setPadding(new Insets(10));
+        VBox.setVgrow(contentLabel, Priority.ALWAYS);
 
-        root.setTop(header);
-        root.setLeft(leftMenu);
-        root.setCenter(centerBox);
+        BorderPane content = new BorderPane();
+        content.setLeft(leftMenu);
+        content.setCenter(centerBox);
+
+        this.root = new AcademyScreenTemplate(game, content);
 
         refresh(academy, selectedHunter);
     }
@@ -84,6 +84,7 @@ public class HunterDetailsView {
     private void refresh(HunterAcademy academy, MonsterHunter selectedHunter) {
         if (academy == null || selectedHunter == null) {
             contentLabel.setText("Nenhum caçador selecionado.");
+            root.refresh();
             return;
         }
 
@@ -132,6 +133,7 @@ public class HunterDetailsView {
         }
 
         contentLabel.setText(sb.toString());
+        root.refresh();
     }
 
     public Parent getRoot() {
