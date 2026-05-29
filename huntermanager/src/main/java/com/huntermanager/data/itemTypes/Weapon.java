@@ -10,6 +10,7 @@ import com.huntermanager.data.itemTypes.itemData.Equippable;
 import com.huntermanager.data.itemTypes.itemData.StatsModifier;
 
 public class Weapon extends Item implements Equippable {
+    private MonsterHunter equippedBy;
     private final List<StatsModifier> modifiers;
 
     public Weapon(String name, String description, List<StatsModifier> modifiers) {
@@ -18,12 +19,24 @@ public class Weapon extends Item implements Equippable {
     }
 
     @Override
+    public MonsterHunter getEquippedBy() {
+        return equippedBy;
+    }
+
+    @Override
+    public void setEquippedBy(MonsterHunter hunter) {
+        this.equippedBy = hunter;
+    }
+    
+    @Override
     public EquipmentSlot getSlot() {
         return EquipmentSlot.WEAPON;
     }
 
     @Override
     public void onEquip(MonsterHunter hunter) {
+        setEquippedBy(hunter);
+
         for (StatsModifier modifier : modifiers) {
             hunter.addModifier(modifier);
         }
@@ -33,6 +46,10 @@ public class Weapon extends Item implements Equippable {
     public void onUnequip(MonsterHunter hunter) {
         for (StatsModifier modifier : modifiers) {
             hunter.removeModifier(modifier);
+        }
+
+        if (getEquippedBy() == hunter) {
+            setEquippedBy(null);
         }
     }
 

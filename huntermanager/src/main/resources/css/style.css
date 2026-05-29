@@ -102,6 +102,40 @@
     -fx-background-color: #444444;
 }
 
+.menu-button-tiny {
+    font-family: 'Consolas';
+    font-size: 13px;
+    background-color: #1d1d1d;
+    border-color: #666666;
+    border-width: 1px;
+    padding: 8px 16px;
+
+    -fx-font-family: "Consolas";
+    -fx-font-size: 13px;
+    -fx-background-color: #1d1d1d;
+    -fx-text-fill: white;
+    -fx-border-color: #666666;
+    -fx-border-width: 1px;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 40px;
+    -fx-padding: 8px 16px;
+    
+}
+
+.menu-button-tiny:hover {
+    background-color: #2a2a2a;
+    border-color: #aaaaaa;
+    font-size: 14px;
+    -fx-background-color: #2a2a2a;
+    -fx-border-color: #aaaaaa;
+    -fx-font-size: 14px;
+}
+
+.menu-button-tiny:pressed {
+    background-color: #444444;
+    -fx-background-color: #444444;
+}
+
 .default {
     font-family: 'Consolas';
     font-size: 17px;
@@ -198,5 +232,48 @@
     -fx-font-family: 'Consolas';
     -fx-font-size: 16px;
     -fx-text-fill: white;
+}
+
+.storage-card {
+    -fx-background-color: #181818;
+    -fx-border-color: #666666;
+    -fx-border-width: 1px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.storage-card-empty {
+    -fx-background-color: #121212;
+    -fx-border-color: #333333;
+    -fx-border-width: 1px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.storage-slot-label {
+    -fx-font-family: "Consolas";
+    -fx-font-size: 11px;
+    -fx-text-fill: #777777;
+}
+
+.storage-item-name {
+    -fx-font-family: "Consolas";
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.storage-item-type {
+    -fx-font-family: "Consolas";
+    -fx-font-size: 12px;
+    -fx-text-fill: #aaaaaa;
+}
+
+.equipment-slot-box {
+    -fx-background-color: #181818;
+    -fx-border-color: #444444;
+    -fx-border-width: 1px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
 }
 

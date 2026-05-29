@@ -22,9 +22,9 @@ public class MonsterHunter extends Entity {
 
     private int stress;
 
-    private List<Trauma> traumas;
-    private List<Trait> traits;
-    private List<Origin> origins;
+    private final List<Trauma> traumas;
+    private final List<Trait> traits;
+    private final List<Origin> origins;
 
     public MonsterHunter(String name, int constitution, int agility, int mind, int social, int luck) {
         super(
@@ -164,6 +164,12 @@ public class MonsterHunter extends Entity {
         if (item == null) return;
 
         EquipmentSlot slot = item.getSlot();
+
+        MonsterHunter previousOwner = item.getEquippedBy();
+
+        if (previousOwner != null && previousOwner != this) {
+            previousOwner.unequip(slot);
+        }
 
         if (equipment.containsKey(slot)) {
             equipment.get(slot).onUnequip(this);

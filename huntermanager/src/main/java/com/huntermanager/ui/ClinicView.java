@@ -65,19 +65,19 @@ public class ClinicView {
             int hunterIndex = clinicSlots[i];
 
             if (hunterIndex == -1) {
-                sb.append(i + 1).append(" - [Vazio]\n\n");
+                sb.append(i + 1).append(" - [ Vazio ]\n\n");
             } else {
                 MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
                 int recoveryHP;
                 int recoveryStress;
-                // HP RECOVERY
+            // HP RECOVERY
                 if (hunter.getTraits().contains(Trait.FAST_RECOVERY)) {
                     recoveryHP = 8 + (hunter.getConstitution() * 4);
                 } else {
                     recoveryHP = 8 + (hunter.getConstitution() * 2);
                 }
 
-                // STRESS REDUCED OR ADDED
+            // STRESS REDUCED OR ADDED
                 if (hunter.getTraumas().contains(Trauma.LATROFOBIA)) {
                     recoveryStress = (Math.max(1, 3 - hunter.getSocial()));
                 } else {

@@ -10,11 +10,22 @@ import com.huntermanager.data.itemTypes.itemData.Equippable;
 import com.huntermanager.data.itemTypes.itemData.StatsModifier;
 
 public class Accessory extends Item implements Equippable {
+    private MonsterHunter equippedBy;
     private final List<StatsModifier> modifiers;
 
     public Accessory(String name, String description, List<StatsModifier> modifiers) {
         super(name, description, ItemType.ACCESSORY);
         this.modifiers = modifiers;
+    }
+
+    @Override
+    public MonsterHunter getEquippedBy() {
+        return equippedBy;
+    }
+
+    @Override
+    public void setEquippedBy(MonsterHunter hunter) {
+        this.equippedBy = hunter;
     }
 
     @Override
@@ -24,6 +35,8 @@ public class Accessory extends Item implements Equippable {
 
     @Override
     public void onEquip(MonsterHunter hunter) {
+        setEquippedBy(hunter);
+
         for (StatsModifier modifier : modifiers) {
             hunter.addModifier(modifier);
         }
@@ -34,5 +47,13 @@ public class Accessory extends Item implements Equippable {
         for (StatsModifier modifier : modifiers) {
             hunter.removeModifier(modifier);
         }
+
+        if (getEquippedBy() == hunter) {
+            setEquippedBy(null);
+        }
+    }
+
+    public List<StatsModifier> getModifiers() {
+        return modifiers;
     }
 }

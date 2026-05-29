@@ -9,7 +9,7 @@ public enum Stats {
     MAX_HP,
     MAX_PE,
 
-// Esses são bônus extra de Atributos.
+// Those are the bonus for Attributes. "+1 to that Attribute", etc.
     CONSTITUTION,
     AGILITY,
     MIND,

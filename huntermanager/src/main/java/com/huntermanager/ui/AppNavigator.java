@@ -1,6 +1,8 @@
 package com.huntermanager.ui;
 
 import com.huntermanager.Game;
+import com.huntermanager.data.MonsterHunter;
+import com.huntermanager.data.enums.EquipmentSlot;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -60,8 +62,14 @@ public class AppNavigator {
         setRoot(view.getRoot());
     }
 
+
     public void showStorageView() {
         StorageView view = new StorageView(this, game);
+        setRoot(view.getRoot());
+    }
+    
+    public void showHunterEquipItemView(MonsterHunter hunter, EquipmentSlot slot) {
+        HunterEquipItemView view = new HunterEquipItemView(this, game, hunter, slot);
         setRoot(view.getRoot());
     }
 }

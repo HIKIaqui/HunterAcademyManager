@@ -63,7 +63,7 @@ public class BarView {
             int hunterIndex = barSlots[i];
 
             if (hunterIndex == -1) {
-                sb.append(i + 1).append(" - [Vazio]\n\n");
+                sb.append(i + 1).append(" - [ Vazio ]\n\n");
             } else {
                 MonsterHunter hunter = academy.getHunterByIndex(hunterIndex);
                 int recoveryStress = 1 + hunter.getSocial();

@@ -3,6 +3,8 @@ package com.huntermanager.ui;
 import com.huntermanager.Game;
 import com.huntermanager.data.HunterAcademy;
 import com.huntermanager.data.Item;
+import com.huntermanager.data.MonsterHunter;
+import com.huntermanager.data.enums.EquipmentSlot;
 import com.huntermanager.data.itemTypes.itemData.Equippable;
 import com.huntermanager.ui.components.AcademyHeader;
 
@@ -18,20 +20,29 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 
-public class StorageView {
+public class HunterEquipItemView {
 
     private final BorderPane root = new BorderPane();
 
-    private final HunterAcademy academy;
     private final AppNavigator navigator;
     private final Game game;
+    private final HunterAcademy academy;
+    private final MonsterHunter hunter;
+    private final EquipmentSlot targetSlot;
 
     private final TilePane inventoryPane = new TilePane();
 
-    public StorageView(AppNavigator navigator, Game game) {
+    public HunterEquipItemView(
+        AppNavigator navigator,
+        Game game,
+        MonsterHunter hunter,
+        EquipmentSlot targetSlot
+    ) {
         this.navigator = navigator;
         this.game = game;
         this.academy = game.getAcademy();
+        this.hunter = hunter;
+        this.targetSlot = targetSlot;
 
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #101010;");
@@ -42,13 +53,16 @@ public class StorageView {
 
         Button backButton = new Button("Voltar");
         backButton.getStyleClass().add("menu-button");
-        backButton.setOnAction(e -> navigator.showAcademyView());
+        backButton.setOnAction(e -> navigator.showHuntersView());
 
         VBox leftMenu = new VBox(10, backButton);
         leftMenu.setPadding(new Insets(10));
 
-        Label titleLabel = new Label("ARMAZÉM");
+        Label titleLabel = new Label(getTitleText());
         titleLabel.getStyleClass().add("details-big");
+
+        Label subtitleLabel = new Label(getSubtitleText());
+        subtitleLabel.getStyleClass().add("details-small");
 
         inventoryPane.setHgap(12);
         inventoryPane.setVgap(12);
@@ -59,7 +73,7 @@ public class StorageView {
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
 
-        VBox centerBox = new VBox(10, titleLabel, scrollPane);
+        VBox centerBox = new VBox(10, titleLabel, subtitleLabel, scrollPane);
         centerBox.setPadding(new Insets(10));
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
@@ -68,6 +82,26 @@ public class StorageView {
         root.setCenter(centerBox);
 
         refresh();
+    }
+
+    private String getTitleText() {
+        return "EQUIPAR " + getSlotDisplayName().toUpperCase();
+    }
+
+    private String getSubtitleText() {
+        if (hunter == null) {
+            return "Nenhum caçador selecionado.";
+        }
+
+        return "Caçador: " + hunter.getName();
+    }
+
+    private String getSlotDisplayName() {
+        return switch (targetSlot) {
+            case WEAPON -> "Arma";
+            case SUIT -> "Traje";
+            case ACCESSORY -> "Acessório";
+        };
     }
 
     private void refresh() {
@@ -80,72 +114,85 @@ public class StorageView {
             return;
         }
 
+        if (hunter == null) {
+            Label errorLabel = new Label("Nenhum caçador selecionado.");
+            errorLabel.getStyleClass().add("details-big");
+            inventoryPane.getChildren().add(errorLabel);
+            return;
+        }
+
         Item[] inventory = academy.getInventory();
+
+        boolean foundCompatibleItem = false;
 
         for (int i = 0; i < inventory.length; i++) {
             Item item = inventory[i];
+
+            if (!isCompatibleItem(item)) {
+                continue;
+            }
+
             VBox itemCard = createItemCard(i, item);
             inventoryPane.getChildren().add(itemCard);
+            foundCompatibleItem = true;
+        }
+
+        if (!foundCompatibleItem) {
+            Label emptyLabel = new Label("Nenhum item compatível encontrado no armazém.");
+            emptyLabel.getStyleClass().add("details-small");
+            inventoryPane.getChildren().add(emptyLabel);
         }
     }
 
+    private boolean isCompatibleItem(Item item) {
+        if (item == null) {
+            return false;
+        }
+
+        if (!(item instanceof Equippable equippable)) {
+            return false;
+        }
+
+        return equippable.getSlot() == targetSlot;
+    }
+
     private VBox createItemCard(int slotIndex, Item item) {
-        boolean isEmpty = item == null;
+        Equippable equippable = (Equippable) item;
 
         Label slotLabel = new Label("Slot " + (slotIndex + 1));
         slotLabel.getStyleClass().add("storage-slot-label");
 
-        Label nameLabel = new Label(isEmpty ? " " : item.getName());
+        Label nameLabel = new Label(item.getName());
         nameLabel.getStyleClass().add("storage-item-name");
         nameLabel.setWrapText(true);
 
-        Label typeLabel = new Label(isEmpty ? " " : item.getType().toString());
+        Label typeLabel = new Label(item.getType().toString());
         typeLabel.getStyleClass().add("storage-item-type");
-
-        Label equippedByLabel = new Label(getEquippedByText(item));
-        equippedByLabel.getStyleClass().add("storage-item-type");
-
-        Button detailsButton = new Button("Info");
-        detailsButton.getStyleClass().add("menu-button-tiny");
-        detailsButton.setDisable(isEmpty);
 
         Button equipButton = new Button("Equipar");
         equipButton.getStyleClass().add("menu-button-tiny");
-        equipButton.setDisable(isEmpty);
-
-        detailsButton.setOnAction(e -> {
-            // Lógica futura: abrir painel/modal de detalhes do item
-            System.out.println("Ver detalhes do item no slot " + slotIndex);
-        });
 
         equipButton.setOnAction(e -> {
-            // Lógica futura: abrir seleção de caçador para equipar
-            System.out.println("Equipar item do slot " + slotIndex);
+            hunter.equip(equippable);
+
+            // Por enquanto, só equipa.
+            // Depois dá pra decidir se o item sai do inventário ou continua no armazém.
+            navigator.showHuntersView();
         });
 
-        HBox buttonBox = new HBox(8, detailsButton, equipButton);
+        HBox buttonBox = new HBox(8, equipButton);
         buttonBox.setAlignment(Pos.BOTTOM_LEFT);
 
-        VBox card = new VBox(8, slotLabel, nameLabel, typeLabel, equippedByLabel, buttonBox);
+        VBox card = new VBox(8, slotLabel, nameLabel, typeLabel, buttonBox);
         card.setPadding(new Insets(10));
-        card.setPrefSize(220, 150);
-        card.setMinSize(220, 150);
-        card.setMaxSize(220, 150);
-
-        card.getStyleClass().add(isEmpty ? "storage-card-empty" : "storage-card");
+        card.setPrefSize(220, 135);
+        card.setMinSize(220, 135);
+        card.setMaxSize(220, 135);
+        card.getStyleClass().add("storage-card");
 
         return card;
     }
 
-
-//Helper
-    private String getEquippedByText(Item item) {
-        if (item instanceof Equippable equippable && equippable.isEquipped()) {
-            return "Equipado por: " + equippable.getEquippedBy().getName();
-        }
-
-        return "No armazém";
-    }
     public Parent getRoot() {
         return root;
     }

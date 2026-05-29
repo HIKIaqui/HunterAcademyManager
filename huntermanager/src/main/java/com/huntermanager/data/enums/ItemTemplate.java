@@ -23,6 +23,41 @@ public enum ItemTemplate {
         0
     ),
 
+    SHORTSWORD(
+        "Espada Curta",
+        "Uma espada curta, leve e simples.",
+        ItemType.WEAPON,
+        EquipmentSlot.WEAPON,
+        List.of(
+            new StatsModifier(Stats.DAMAGE, 6),
+            new StatsModifier(Stats.CRIT_CHANCE, 3)
+        ),
+        0
+    ),
+
+    LONGSWORD(
+        "Espada Longa",
+        "Uma espada longa de duas mãos. É isso.",
+        ItemType.WEAPON,
+        EquipmentSlot.WEAPON,
+        List.of(
+            new StatsModifier(Stats.DAMAGE, 8),
+            new StatsModifier(Stats.CRIT_CHANCE, 2)
+        ),
+        0
+    ),
+
+    LIGHT_ARMOR(
+        "Armadura Leve",
+        "Protege um pouco.",
+        ItemType.SUIT,
+        EquipmentSlot.SUIT,
+        List.of(
+            new StatsModifier(Stats.ARMOR, 3)
+        ),
+        0
+    ),
+
     HEAVY_ARMOR(
         "Armadura Pesada",
         "Protege bem, mas te transforma numa geladeira com depressão.",

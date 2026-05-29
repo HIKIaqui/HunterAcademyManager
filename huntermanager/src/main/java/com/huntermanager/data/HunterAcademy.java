@@ -13,7 +13,7 @@ public class HunterAcademy {
     private int[] clinicSlots = {-1, -1};
     private int[] barSlots = {-1, -1};
 
-    private Item[] inventory = new Item[20];
+    private Item[] inventory = new Item[24];
 
     public static final int MORNING = 0;
     public static final int AFTERNOON = 1;
