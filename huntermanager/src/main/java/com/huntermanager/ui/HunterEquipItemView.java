@@ -174,9 +174,6 @@ public class HunterEquipItemView {
 
         equipButton.setOnAction(e -> {
             hunter.equip(equippable);
-
-            // Por enquanto, só equipa.
-            // Depois dá pra decidir se o item sai do inventário ou continua no armazém.
             navigator.showHuntersView();
         });
 
